@@ -67,6 +67,8 @@ const (
 	SSVPartialSignatureMsgType
 	// DKGMsgType represent all DKG related messages
 	DKGMsgType
+	// VoluntaryExitMsgType represents all voluntary exit messages
+	VoluntaryExitMsgType
 )
 
 type Root interface {
