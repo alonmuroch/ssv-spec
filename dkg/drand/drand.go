@@ -4,6 +4,7 @@ import (
 	"github.com/bloxapp/ssv-spec/dkg"
 	dranddkg "github.com/drand/kyber/share/dkg"
 	"github.com/pkg/errors"
+	"time"
 )
 
 type DRand struct {
@@ -48,6 +49,9 @@ func (d *DRand) ProcessMsg(msg *dkg.SignedMessage) (bool, *dkg.ProtocolOutcome, 
 	default:
 		return false, nil, errors.New("unknown protocol message type")
 	}
+
+	// TODO - we wait as result is a channel and can take time to be set, need better handling
+	time.Sleep(time.Millisecond * 50)
 
 	if result := d.getResult(); result != nil {
 		if err := d.validateResult(result); err != nil {
