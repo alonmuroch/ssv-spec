@@ -33,14 +33,14 @@ func ConsensusNotStarted() *MultiStartNewRunnerDutySpecTest {
 				Name:                    "sync committee",
 				Runner:                  startRunner(testingutils.SyncCommitteeRunner(ks), testingutils.TestingSyncCommitteeDuty),
 				Duty:                    testingutils.TestingSyncCommitteeDuty,
-				PostDutyRunnerStateRoot: "f3f02f11ae873c4b4cb1be3b58105df1f5deb93885da19eaee243e5a1916c338",
+				PostDutyRunnerStateRoot: "9d06c3b83aee2bf5723ac0a19fdb9d011eeb87694575e27cc3775a8772eedbfa",
 				OutputMessages:          []*ssv.SignedPartialSignatureMessage{},
 			},
 			{
 				Name:                    "aggregator",
 				Runner:                  startRunner(testingutils.AggregatorRunner(ks), testingutils.TestingAggregatorDuty),
 				Duty:                    testingutils.TestingAggregatorDuty,
-				PostDutyRunnerStateRoot: "f696f54f07f704941b08b1acd16abdc820f07be0485a3dc47d942cd0e0de8fb2",
+				PostDutyRunnerStateRoot: "f3f02f11ae873c4b4cb1be3b58105df1f5deb93885da19eaee243e5a1916c338",
 				OutputMessages: []*ssv.SignedPartialSignatureMessage{
 					testingutils.PreConsensusSelectionProofMsg(ks.Shares[1], ks.Shares[1], 1, 1), // broadcasts when starting a new duty
 				},
@@ -49,7 +49,7 @@ func ConsensusNotStarted() *MultiStartNewRunnerDutySpecTest {
 				Name:                    "proposer",
 				Runner:                  startRunner(testingutils.ProposerRunner(ks), testingutils.TestingProposerDuty),
 				Duty:                    testingutils.TestingProposerDuty,
-				PostDutyRunnerStateRoot: "ca2e90845363d974efe8ae708c08cdaa9d9e8685da06564ce5eae0fa37599d08",
+				PostDutyRunnerStateRoot: "f696f54f07f704941b08b1acd16abdc820f07be0485a3dc47d942cd0e0de8fb2",
 				OutputMessages: []*ssv.SignedPartialSignatureMessage{
 					testingutils.PreConsensusRandaoMsg(ks.Shares[1], 1), // broadcasts when starting a new duty
 				},
