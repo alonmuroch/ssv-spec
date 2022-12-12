@@ -3,20 +3,11 @@ package types
 import (
 	"bytes"
 	"crypto/rsa"
-
 	"github.com/attestantio/go-eth2-client/spec/bellatrix"
 	spec "github.com/attestantio/go-eth2-client/spec/phase0"
 	"github.com/ethereum/go-ethereum/common"
 	ssz "github.com/ferranbt/fastssz"
 	"github.com/herumi/bls-eth-go-binary/bls"
-)
-
-// DomainType is a unique identifier for signatures, 2 identical pieces of data signed with different domains will result in different sigs
-type DomainType []byte
-
-var (
-	PrimusTestnet = DomainType("primus_testnet")
-	ShifuTestnet  = DomainType("shifu_testnet")
 )
 
 type SignatureType [4]byte

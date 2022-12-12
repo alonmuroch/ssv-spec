@@ -25,10 +25,10 @@ var MultiSignQBFTMsg = func(sks []*bls.SecretKey, ids []types.OperatorID, msg *q
 }
 
 var SignQBFTMsg = func(sk *bls.SecretKey, id types.OperatorID, msg *qbft.Message) *qbft.SignedMessage {
-	domain := types.PrimusTestnet
+	forkDigest := types.ShifuTestnetSSVNetworkChain.DefaultForkDigest()
 	sigType := types.QBFTSignatureType
 
-	r, _ := types.ComputeSigningRoot(msg, types.ComputeSignatureDomain(domain, sigType))
+	r, _ := types.ComputeSigningRoot(msg, types.ComputeSignatureDomain(forkDigest, sigType))
 	sig := sk.SignByte(r)
 
 	return &qbft.SignedMessage{

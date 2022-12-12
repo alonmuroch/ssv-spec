@@ -17,7 +17,7 @@ type Controller struct {
 	StoredInstances InstanceContainer
 	// FutureMsgsContainer holds all msgs from a higher height
 	FutureMsgsContainer map[types.OperatorID]Height // maps msg signer to height of higher height received msgs
-	Domain              types.DomainType
+	Domain              types.ForkDigest
 	Share               *types.Share
 	config              IConfig
 }
@@ -25,7 +25,7 @@ type Controller struct {
 func NewController(
 	identifier []byte,
 	share *types.Share,
-	domain types.DomainType,
+	domain types.ForkDigest,
 	config IConfig,
 ) *Controller {
 	return &Controller{

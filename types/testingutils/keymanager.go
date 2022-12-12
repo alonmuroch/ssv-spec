@@ -21,7 +21,7 @@ type testingKeyManager struct {
 	keys           map[string]*bls.SecretKey
 	ecdsaKeys      map[string]*ecdsa.PrivateKey
 	encryptionKeys map[string]*rsa.PrivateKey
-	domain         types.DomainType
+	forkDigest     types.ForkDigest
 
 	slashableDataRoots [][]byte
 }
@@ -35,7 +35,7 @@ func NewTestingKeyManagerWithSlashableRoots(slashableDataRoots [][]byte) *testin
 		keys:           map[string]*bls.SecretKey{},
 		ecdsaKeys:      map[string]*ecdsa.PrivateKey{},
 		encryptionKeys: nil,
-		domain:         types.PrimusTestnet,
+		forkDigest:     types.ShifuTestnetSSVNetworkChain.DefaultForkDigest(),
 
 		slashableDataRoots: slashableDataRoots,
 	}
@@ -87,7 +87,7 @@ func (km *testingKeyManager) IsAttestationSlashable(data *spec.AttestationData) 
 
 func (km *testingKeyManager) SignRoot(data types.Root, sigType types.SignatureType, pk []byte) (types.Signature, error) {
 	if k, found := km.keys[hex.EncodeToString(pk)]; found {
-		computedRoot, err := types.ComputeSigningRoot(data, types.ComputeSignatureDomain(km.domain, sigType))
+		computedRoot, err := types.ComputeSigningRoot(data, types.ComputeSignatureDomain(km.forkDigest, sigType))
 		if err != nil {
 			return nil, errors.Wrap(err, "could not sign root")
 		}

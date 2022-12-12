@@ -17,10 +17,10 @@ var testingSignedMsg = func() *SignedMessage {
 	return SignMsg(TestingSK, 1, TestingMessage)
 }()
 var SignMsg = func(sk *bls.SecretKey, id types.OperatorID, msg *Message) *SignedMessage {
-	domain := types.PrimusTestnet
+	forkDigest := types.ShifuTestnetSSVNetworkChain.DefaultForkDigest()
 	sigType := types.QBFTSignatureType
 
-	r, _ := types.ComputeSigningRoot(msg, types.ComputeSignatureDomain(domain, sigType))
+	r, _ := types.ComputeSigningRoot(msg, types.ComputeSignatureDomain(forkDigest, sigType))
 	sig := sk.SignByte(r)
 
 	return &SignedMessage{
@@ -40,7 +40,6 @@ var testingShare = &types.Share{
 	OperatorID:      1,
 	ValidatorPubKey: testingValidatorPK[:],
 	SharePubKey:     TestingSK.GetPublicKey().Serialize(),
-	DomainType:      types.PrimusTestnet,
 	Quorum:          3,
 	PartialQuorum:   2,
 	Committee: []*types.Operator{

@@ -10,8 +10,8 @@ import (
 type signing interface {
 	// GetSigner returns a Signer instance
 	GetSigner() types.SSVSigner
-	// GetSignatureDomainType returns the Domain type used for signatures
-	GetSignatureDomainType() types.DomainType
+	// GetSignatureDomainType returns the ForkDigest type used for signatures
+	GetSignatureDomainType() types.ForkDigest
 }
 
 type IConfig interface {
@@ -29,7 +29,7 @@ type IConfig interface {
 type Config struct {
 	Signer      types.SSVSigner
 	SigningPK   []byte
-	Domain      types.DomainType
+	ForkDigest  types.ForkDigest
 	ValueCheckF ProposedValueCheckF
 	ProposerF   ProposerF
 	Network     Network
@@ -46,9 +46,9 @@ func (c *Config) GetSigningPubKey() []byte {
 	return c.SigningPK
 }
 
-// GetSignatureDomainType returns the Domain type used for signatures
-func (c *Config) GetSignatureDomainType() types.DomainType {
-	return c.Domain
+// GetSignatureDomainType returns the ForkDigest type used for signatures
+func (c *Config) GetSignatureDomainType() types.ForkDigest {
+	return c.ForkDigest
 }
 
 // GetValueCheckF returns value check instance

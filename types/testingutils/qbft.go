@@ -9,9 +9,9 @@ import (
 
 var TestingConfig = func(keySet *TestKeySet) *qbft.Config {
 	return &qbft.Config{
-		Signer:    NewTestingKeyManager(),
-		SigningPK: keySet.Shares[1].GetPublicKey().Serialize(),
-		Domain:    types.PrimusTestnet,
+		Signer:     NewTestingKeyManager(),
+		SigningPK:  keySet.Shares[1].GetPublicKey().Serialize(),
+		ForkDigest: types.ShifuTestnetSSVNetworkChain.DefaultForkDigest(),
 		ValueCheckF: func(data []byte) error {
 			if bytes.Equal(data, TestingInvalidValueCheck) {
 				return errors.New("invalid value")
@@ -38,7 +38,6 @@ var TestingShare = func(keysSet *TestKeySet) *types.Share {
 		OperatorID:      1,
 		ValidatorPubKey: keysSet.ValidatorPK.Serialize(),
 		SharePubKey:     keysSet.Shares[1].GetPublicKey().Serialize(),
-		DomainType:      types.PrimusTestnet,
 		Quorum:          keysSet.Threshold,
 		PartialQuorum:   keysSet.PartialThreshold,
 		Committee:       keysSet.Committee(),
@@ -75,7 +74,7 @@ func NewTestingQBFTController(
 	return qbft.NewController(
 		identifier,
 		share,
-		types.PrimusTestnet,
+		types.ShifuTestnetSSVNetworkChain.DefaultForkDigest(),
 		config,
 	)
 }

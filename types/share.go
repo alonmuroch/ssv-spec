@@ -11,7 +11,6 @@ type Share struct {
 	SharePubKey           []byte
 	Committee             []*Operator
 	Quorum, PartialQuorum uint64
-	DomainType            DomainType
 	Graffiti              []byte
 }
 

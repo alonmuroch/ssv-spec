@@ -15,7 +15,7 @@ type SignatureDomain []byte
 type Signature []byte
 
 // VerifyByOperators verifies signature by the provided operators
-func (s Signature) VerifyByOperators(data MessageSignature, domain DomainType, sigType SignatureType, operators []*Operator) error {
+func (s Signature) VerifyByOperators(data MessageSignature, forkDigest ForkDigest, sigType SignatureType, operators []*Operator) error {
 	// decode sig
 	sign := &bls.Sign{}
 	if err := sign.Deserialize(s); err != nil {
@@ -43,7 +43,7 @@ func (s Signature) VerifyByOperators(data MessageSignature, domain DomainType, s
 	}
 
 	// compute root
-	computedRoot, err := ComputeSigningRoot(data, ComputeSignatureDomain(domain, sigType))
+	computedRoot, err := ComputeSigningRoot(data, ComputeSignatureDomain(forkDigest, sigType))
 	if err != nil {
 		return errors.Wrap(err, "could not compute signing root")
 	}
@@ -55,7 +55,7 @@ func (s Signature) VerifyByOperators(data MessageSignature, domain DomainType, s
 	return nil
 }
 
-func (s Signature) VerifyMultiPubKey(data Root, domain DomainType, sigType SignatureType, pks [][]byte) error {
+func (s Signature) VerifyMultiPubKey(data Root, domain ForkDigest, sigType SignatureType, pks [][]byte) error {
 	var aggPK *bls.PublicKey
 	for _, pkByts := range pks {
 		pk := &bls.PublicKey{}
@@ -77,7 +77,7 @@ func (s Signature) VerifyMultiPubKey(data Root, domain DomainType, sigType Signa
 	return s.Verify(data, domain, sigType, aggPK.Serialize())
 }
 
-func (s Signature) Verify(data Root, domain DomainType, sigType SignatureType, pkByts []byte) error {
+func (s Signature) Verify(data Root, domain ForkDigest, sigType SignatureType, pkByts []byte) error {
 	computedRoot, err := ComputeSigningRoot(data, ComputeSignatureDomain(domain, sigType))
 	if err != nil {
 		return errors.Wrap(err, "could not compute signing root")
@@ -99,7 +99,7 @@ func (s Signature) Verify(data Root, domain DomainType, sigType SignatureType, p
 	return nil
 }
 
-func (s Signature) ECRecover(data Root, domain DomainType, sigType SignatureType, address common.Address) error {
+func (s Signature) ECRecover(data Root, domain ForkDigest, sigType SignatureType, address common.Address) error {
 	computedRoot, err := ComputeSigningRoot(data, ComputeSignatureDomain(domain, sigType))
 	if err != nil {
 		return errors.Wrap(err, "could not compute signing root")
@@ -148,8 +148,8 @@ func ComputeSigningRoot(data Root, domain SignatureDomain) ([]byte, error) {
 	return ret[:], nil
 }
 
-func ComputeSignatureDomain(domain DomainType, sigType SignatureType) SignatureDomain {
-	return SignatureDomain(append(domain, sigType[:]...))
+func ComputeSignatureDomain(forkDigest ForkDigest, sigType SignatureType) SignatureDomain {
+	return append(forkDigest[:], sigType[:]...)
 }
 
 // ReconstructSignatures receives a map of user indexes and serialized bls.Sign.

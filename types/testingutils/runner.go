@@ -51,7 +51,7 @@ var baseRunner = func(role types.BeaconRole, valCheck qbft.ProposedValueCheckF, 
 	contr := qbft.NewController(
 		identifier[:],
 		share,
-		types.PrimusTestnet,
+		types.ShifuTestnetSSVNetworkChain.DefaultForkDigest(),
 		config,
 	)
 

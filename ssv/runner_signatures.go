@@ -53,7 +53,7 @@ func (b *BaseRunner) validatePartialSigMsg(
 		return errors.Wrap(err, "SignedPartialSignatureMessage invalid")
 	}
 
-	if err := signedMsg.GetSignature().VerifyByOperators(signedMsg, b.Share.DomainType, types.PartialSignatureType, b.Share.Committee); err != nil {
+	if err := signedMsg.GetSignature().VerifyByOperators(signedMsg, b.ForkDigest, types.PartialSignatureType, b.Share.Committee); err != nil {
 		return errors.Wrap(err, "failed to verify PartialSignature")
 	}
 

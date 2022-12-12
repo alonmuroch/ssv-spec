@@ -34,7 +34,7 @@ var TestingDKGNode = func(keySet *TestKeySet) *dkg.Node {
 		},
 		Network:             network,
 		Storage:             NewTestingStorage(),
-		SignatureDomainType: types.PrimusTestnet,
+		SignatureDomainType: types.ShifuTestnetSSVNetworkChain.DefaultForkDigest(),
 		Signer:              km,
 	}
 
@@ -46,10 +46,10 @@ var TestingDKGNode = func(keySet *TestKeySet) *dkg.Node {
 }
 
 var SignDKGMsg = func(sk *ecdsa.PrivateKey, id types.OperatorID, msg *dkg.Message) *dkg.SignedMessage {
-	domain := types.PrimusTestnet
+	forkDigest := types.ShifuTestnetSSVNetworkChain.DefaultForkDigest()
 	sigType := types.DKGSignatureType
 
-	r, _ := types.ComputeSigningRoot(msg, types.ComputeSignatureDomain(domain, sigType))
+	r, _ := types.ComputeSigningRoot(msg, types.ComputeSignatureDomain(forkDigest, sigType))
 	sig, _ := crypto.Sign(r, sk)
 
 	return &dkg.SignedMessage{

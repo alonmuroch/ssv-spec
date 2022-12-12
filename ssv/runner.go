@@ -41,11 +41,13 @@ type Runner interface {
 }
 
 type BaseRunner struct {
-	State          *State
-	Share          *types.Share
-	QBFTController *qbft.Controller
-	BeaconNetwork  types.BeaconNetwork
-	BeaconRoleType types.BeaconRole
+	State           *State
+	Share           *types.Share
+	ForkDigest      types.ForkDigest
+	QBFTController  *qbft.Controller
+	BeaconNetwork   types.BeaconNetwork
+	SSVNetworkChain types.SSVNetworkChain
+	BeaconRoleType  types.BeaconRole
 }
 
 // baseStartNewDuty is a base func that all runner implementation can call to start a duty
@@ -53,6 +55,14 @@ func (b *BaseRunner) baseStartNewDuty(runner Runner, duty *types.Duty) error {
 	if err := b.canStartNewDuty(); err != nil {
 		return err
 	}
+
+	// Based on previous decided instance we calculate the fork digest to be used on the next instance
+	currentForkDigest, err := b.forkBasedOnLatestDecided()
+	if err != nil {
+		return errors.Wrap(err, "could not calculate current fork digest")
+	}
+	b.ForkDigest = currentForkDigest
+
 	b.State = NewRunnerState(b.Share.Quorum, duty)
 	return runner.executeDuty(duty)
 }

@@ -40,7 +40,7 @@ type Config struct {
 	ReshareProtocol     func(network Network, operatorID types.OperatorID, identifier RequestID, signer types.DKGSigner, storage Storage, oldOperators []types.OperatorID, reshare *Reshare, output *KeyGenOutput) Protocol
 	Network             Network
 	Storage             Storage
-	SignatureDomainType types.DomainType
+	SignatureDomainType types.ForkDigest
 	Signer              types.DKGSigner
 }
 
