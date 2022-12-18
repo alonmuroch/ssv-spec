@@ -3,6 +3,7 @@ package ssv
 import (
 	"crypto/sha256"
 	"encoding/json"
+	"github.com/attestantio/go-eth2-client/spec/phase0"
 	"github.com/bloxapp/ssv-spec/types"
 	"github.com/pkg/errors"
 )
@@ -103,6 +104,7 @@ func (pcsm *PartialSignatureMessage) Validate() error {
 // SignedPartialSignatureMessage is an operator's signature over PartialSignatureMessage
 type SignedPartialSignatureMessage struct {
 	Message   PartialSignatureMessages
+	Slot      phase0.Slot
 	Signature types.Signature
 	Signer    types.OperatorID
 }
