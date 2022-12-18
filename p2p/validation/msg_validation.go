@@ -10,6 +10,14 @@ import (
 	"github.com/pkg/errors"
 )
 
+type MessageValidation struct {
+}
+
+// verifySignatureForShare returns nil if message is signed correctly by someone from the share's committee
+func (validation *MessageValidation) verifySignatureForShare(msg types.MessageSignature, share *types.Share) error {
+	panic("implement")
+}
+
 // MsgValidatorFunc represents a message validator
 type MsgValidatorFunc = func(ctx context.Context, p peer.ID, msg *pubsub.Message) pubsub.ValidationResult
 
