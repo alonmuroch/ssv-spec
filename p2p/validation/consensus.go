@@ -56,6 +56,8 @@ func (validation *MessageValidation) validateConsensusMsg() pubsub.ValidationRes
 			}
 		} else if inst.BaseMsgValidation(signedMsg) != nil {
 			return pubsub.ValidationReject
+		} else {
+			return pubsub.ValidationReject
 		}
 	}
 
@@ -70,6 +72,8 @@ func (validation *MessageValidation) isCommitMsgAggregatable(inst *qbft.Instance
 // isTimelyAndUniqueFutureMsg returns if future message is timely and unique
 // A timely and unique message is a unique message for height-round-signer, round is increment and the message is timely (round 4 message comes X seconds after round 3 message)
 func (validation *MessageValidation) isTimelyAndUniqueFutureMsg() bool {
+	// in round can send proposal, prepare, commit, round change
+	// between round msgs according to timeout between rounds
 	panic("implement")
 }
 
