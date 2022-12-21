@@ -6,7 +6,7 @@ import (
 )
 
 func (c *Controller) UponFutureMsg(msg *SignedMessage) (*SignedMessage, error) {
-	if err := ValidateFutureMsg(c.GetConfig(), msg, c.Share.Committee); err != nil {
+	if err := ValidateBaseMsg(c.GetConfig(), msg, c.Share.Committee); err != nil {
 		return nil, errors.Wrap(err, "invalid future msg")
 	}
 	if !c.addHigherHeightMsg(msg) {
@@ -18,7 +18,8 @@ func (c *Controller) UponFutureMsg(msg *SignedMessage) (*SignedMessage, error) {
 	return nil, nil
 }
 
-func ValidateFutureMsg(
+// ValidateBaseMsg makes a valid message validation and returns nil if valid
+func ValidateBaseMsg(
 	config IConfig,
 	msg *SignedMessage,
 	operators []*types.Operator,

@@ -28,40 +28,54 @@ func (validation *MessageValidation) validateConsensusMsg() pubsub.ValidationRes
 	All other msgs (not future or decided) are processed normally by an existing instance (if found)
 	*/
 	if qbft.IsDecidedMsg(contr.Share, signedMsg) {
-		if qbft.ValidateDecided(contr.GetConfig(), signedMsg, contr.Share) != nil {
+		if !validation.isTimelyDecidedMsg(signedMsg) {
 			return pubsub.ValidationReject
 		}
-		if !validation.isTimelyDecidedMsg() {
-			return pubsub.ValidationReject
-		}
+
 		if !validation.isBetterDecidedMsg(contr, signedMsg) {
 			return pubsub.ValidationIgnore
 		}
-	} else if signedMsg.Message.Height > contr.Height {
-		if qbft.ValidateFutureMsg(contr.GetConfig(), signedMsg, contr.Share.Committee) != nil {
+
+		if qbft.ValidateDecided(contr.GetConfig(), signedMsg, contr.Share) != nil {
 			return pubsub.ValidationReject
 		}
-		if !validation.isTimelyAndUniqueFutureMsg() {
-			return pubsub.ValidationIgnore
+		validation.Schedualer.MarkDecidedMessage(signedMsg.Message.Identifier, signedMsg.Signers, signedMsg.Message.Height)
+		return pubsub.ValidationAccept
+	} else { // non-decided messages
+		if !validation.isTimelyMsg(signedMsg) {
+			return pubsub.ValidationReject
 		}
-	} else {
+
 		inst := contr.StoredInstances.FindInstance(signedMsg.Message.Height)
+		// No existing instance, make basic validation on message as it's timely
 		if inst == nil {
-			return pubsub.ValidationIgnore
+			if qbft.ValidateBaseMsg(contr.GetConfig(), signedMsg, contr.Share.Committee) != nil {
+				return pubsub.ValidationReject
+			}
+			validation.Schedualer.MarkConsensusMessage(signedMsg.Message.Identifier, signedMsg.Signers[0], signedMsg.Message.Round, signedMsg.Message.MsgType)
+			return pubsub.ValidationAccept
 		}
+
 		isDecided, _ := inst.IsDecided()
+		// If instance is decided we only accept aggregatable commit messages, other messages are not useful
 		if isDecided {
+			if qbft.BaseCommitValidation(contr.GetConfig(), signedMsg, signedMsg.Message.Height, contr.Share.Committee) != nil {
+				return pubsub.ValidationReject
+			}
 			if !validation.isCommitMsgAggregatable(inst, signedMsg) {
 				return pubsub.ValidationReject
 			}
-		} else if inst.BaseMsgValidation(signedMsg) != nil {
-			return pubsub.ValidationReject
-		} else {
+			validation.Schedualer.MarkConsensusMessage(signedMsg.Message.Identifier, signedMsg.Signers[0], signedMsg.Message.Round, signedMsg.Message.MsgType)
+			return pubsub.ValidationAccept
+		}
+
+		// If instance exists, make a full stateful validation
+		if inst.BaseMsgValidation(signedMsg) != nil {
 			return pubsub.ValidationReject
 		}
+		validation.Schedualer.MarkConsensusMessage(signedMsg.Message.Identifier, signedMsg.Signers[0], signedMsg.Message.Round, signedMsg.Message.MsgType)
+		return pubsub.ValidationAccept
 	}
-
-	return pubsub.ValidationAccept
 }
 
 // isCommitMsgAggregatable will return true if the signed message can be aggregated to the decided message
@@ -69,20 +83,26 @@ func (validation *MessageValidation) isCommitMsgAggregatable(inst *qbft.Instance
 	panic("implement")
 }
 
-// isTimelyAndUniqueFutureMsg returns if future message is timely and unique
-// A timely and unique message is a unique message for height-round-signer, round is increment and the message is timely (round 4 message comes X seconds after round 3 message)
-func (validation *MessageValidation) isTimelyAndUniqueFutureMsg() bool {
-	// in round can send proposal, prepare, commit, round change
-	// between round msgs according to timeout between rounds
-	panic("implement")
+// isTimelyMsg returns if future message is timely
+func (validation *MessageValidation) isTimelyMsg(msg *qbft.SignedMessage) bool {
+	return validation.Schedualer.IsConsensusMessageTimely(
+		msg.Message.Identifier,
+		msg.Signers[0],
+		msg.Message.Round,
+		msg.Message.MsgType,
+	)
 }
 
 // isTimelyDecidedMsg returns true if decided message is timely (both for future and past decided messages)
 // FUTURE: when a valid decided msg is received, the next duty for the runner is marked. The next decided message will not be validated before that time.
 // Aims to prevent a byzantine committee rapidly broadcasting decided messages
 // PAST: a decided message which is "too" old will be rejected as well
-func (validation *MessageValidation) isTimelyDecidedMsg() bool {
-	panic("implement")
+func (validation *MessageValidation) isTimelyDecidedMsg(msg *qbft.SignedMessage) bool {
+	return validation.Schedualer.IsTimelyDecidedMessage(
+		msg.Message.Identifier,
+		msg.Signers,
+		msg.Message.Height,
+	)
 }
 
 // isBetterDecidedMsg returns true if the decided message is better than the best known decided

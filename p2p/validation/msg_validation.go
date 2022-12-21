@@ -9,6 +9,7 @@ import (
 )
 
 type MessageValidation struct {
+	Schedualer *MessageSchedule
 }
 
 func (validation *MessageValidation) Validate(ctx context.Context, p peer.ID, msg *pubsub.Message) pubsub.ValidationResult {

@@ -120,7 +120,7 @@ func CreateCommit(state *State, config IConfig, value []byte) (*SignedMessage, e
 	return signedMsg, nil
 }
 
-func baseCommitValidation(
+func BaseCommitValidation(
 	config IConfig,
 	signedCommit *SignedMessage,
 	height Height,
@@ -157,7 +157,7 @@ func validateCommit(
 	proposedMsg *SignedMessage,
 	operators []*types.Operator,
 ) error {
-	if err := baseCommitValidation(config, signedCommit, height, operators); err != nil {
+	if err := BaseCommitValidation(config, signedCommit, height, operators); err != nil {
 		return err
 	}
 
