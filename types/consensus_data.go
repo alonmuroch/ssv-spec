@@ -3,7 +3,7 @@ package types
 import (
 	"encoding/hex"
 	"encoding/json"
-	bellatrix2 "github.com/attestantio/go-eth2-client/api/v1/bellatrix"
+	"github.com/attestantio/go-eth2-client/spec"
 	"github.com/attestantio/go-eth2-client/spec/altair"
 	"github.com/attestantio/go-eth2-client/spec/bellatrix"
 	"github.com/attestantio/go-eth2-client/spec/phase0"
@@ -45,14 +45,45 @@ func (cm *ContributionsMap) UnmarshalJSON(input []byte) error {
 
 // ConsensusData holds all relevant duty and data Decided on by consensus
 type ConsensusData struct {
-	Duty                   *Duty
-	AttestationData        *phase0.AttestationData
-	BlockData              *bellatrix.BeaconBlock
-	BlindedBlockData       *bellatrix2.BlindedBeaconBlock
-	AggregateAndProof      *phase0.AggregateAndProof
-	SyncCommitteeBlockRoot phase0.Root
-	// SyncCommitteeContribution map holds as key the selection proof for the contribution
-	SyncCommitteeContribution ContributionsMap
+	Duty        *Duty
+	Data        []byte
+	DataVersion spec.DataVersion
+	//AttestationData        *phase0.AttestationData
+	//BlockData *bellatrix.BeaconBlock
+	//BlindedBlockData       *bellatrix2.BlindedBeaconBlock
+	//AggregateAndProof      *phase0.AggregateAndProof
+	//SyncCommitteeBlockRoot phase0.Root
+	//// SyncCommitteeContribution map holds as key the selection proof for the contribution
+	//SyncCommitteeContribution ContributionsMap
+}
+
+func (cid *ConsensusData) GetAttestationData() (interface{}, error) {
+	switch cid.DataVersion {
+	case spec.DataVersionPhase0:
+		ret := &phase0.AttestationData{}
+		if err := ret.UnmarshalSSZ(cid.Data); err != nil {
+			return nil, err
+		}
+		return ret, nil
+	default:
+		return nil, errors.New("unknown attestation data version")
+	}
+}
+
+func (cid *ConsensusData) GetBlockData() (interface{}, error) {
+	switch cid.DataVersion {
+	case spec.DataVersionPhase0:
+	case spec.DataVersionAltair:
+		...
+	}
+}
+
+func (cid *ConsensusData) GetBlindedBlockData() (interface{}, error) {
+	switch cid.DataVersion {
+	case spec.DataVersionPhase0:
+	case spec.DataVersionAltair:
+		...
+	}
 }
 
 func (cid *ConsensusData) Validate() error {

@@ -80,20 +80,28 @@ func (r *ProposerRunner) ProcessPreConsensus(signedMsg *SignedPartialSignatureMe
 	input := &types.ConsensusData{Duty: duty}
 	if r.ProducesBlindedBlocks {
 		// get block data
-		blk, err := r.GetBeaconNode().GetBlindedBeaconBlock(duty.Slot, duty.CommitteeIndex, r.GetShare().Graffiti, fullSig)
+		blk, ver, err := r.GetBeaconNode().GetBlindedBeaconBlock(duty.Slot, duty.CommitteeIndex, r.GetShare().Graffiti, fullSig)
 		if err != nil {
 			return errors.Wrap(err, "failed to get Beacon block")
 		}
 
-		input.BlindedBlockData = blk
+		input.Data, err = blk.(ssz.Marshaler).MarshalSSZ()
+		if err != nil {
+			return err
+		}
+		input.DataVersion = ver
 	} else {
 		// get block data
-		blk, err := r.GetBeaconNode().GetBeaconBlock(duty.Slot, duty.CommitteeIndex, r.GetShare().Graffiti, fullSig)
+		blk, ver, err := r.GetBeaconNode().GetBeaconBlock(duty.Slot, duty.CommitteeIndex, r.GetShare().Graffiti, fullSig)
 		if err != nil {
 			return errors.Wrap(err, "failed to get Beacon block")
 		}
 
-		input.BlockData = blk
+		input.Data, err = blk.(ssz.Marshaler).MarshalSSZ()
+		if err != nil {
+			return err
+		}
+		input.DataVersion = ver
 	}
 
 	if err := r.BaseRunner.decide(r, input); err != nil {
@@ -115,15 +123,19 @@ func (r *ProposerRunner) ProcessConsensus(signedMsg *qbft.SignedMessage) error {
 	}
 
 	// specific duty sig
-	var blkToSign ssz.HashRoot
+	var blkToSign interface{}
 	if r.decidedBlindedBlock() {
-		blkToSign = decidedValue.BlindedBlockData
+		blkToSign, err = decidedValue.GetBlindedBlockData()
 	} else {
-		blkToSign = decidedValue.BlockData
+		blkToSign, err = decidedValue.GetBlockData()
 	}
+	if err != nil {
+		return errors.Wrap(err, "could not get block from decided value")
+	}
+
 	msg, err := r.BaseRunner.signBeaconObject(
 		r,
-		blkToSign,
+		blkToSign.(ssz.HashRoot),
 		decidedValue.Duty.Slot,
 		types.DomainProposer,
 	)

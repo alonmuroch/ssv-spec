@@ -1,9 +1,7 @@
 package ssv
 
 import (
-	bellatrix2 "github.com/attestantio/go-eth2-client/api/v1/bellatrix"
-	"github.com/attestantio/go-eth2-client/spec/altair"
-	"github.com/attestantio/go-eth2-client/spec/bellatrix"
+	"github.com/attestantio/go-eth2-client/spec"
 	"github.com/attestantio/go-eth2-client/spec/phase0"
 	"github.com/bloxapp/ssv-spec/p2p"
 	"github.com/bloxapp/ssv-spec/types"
@@ -26,29 +24,29 @@ type Network interface {
 // AttesterCalls interface has all attester duty specific calls
 type AttesterCalls interface {
 	// GetAttestationData returns attestation data by the given slot and committee index
-	GetAttestationData(slot phase0.Slot, committeeIndex phase0.CommitteeIndex) (*phase0.AttestationData, error)
+	GetAttestationData(slot phase0.Slot, committeeIndex phase0.CommitteeIndex) (interface{}, spec.DataVersion, error)
 	// SubmitAttestation submit the attestation to the node
-	SubmitAttestation(attestation *phase0.Attestation) error
+	SubmitAttestation(attestation interface{}, version spec.DataVersion) error
 }
 
 // ProposerCalls interface has all block proposer duty specific calls
 type ProposerCalls interface {
 	// GetBeaconBlock returns beacon block by the given slot and committee index
-	GetBeaconBlock(slot phase0.Slot, committeeIndex phase0.CommitteeIndex, graffiti, randao []byte) (*bellatrix.BeaconBlock, error)
+	GetBeaconBlock(slot phase0.Slot, committeeIndex phase0.CommitteeIndex, graffiti, randao []byte) (interface{}, spec.DataVersion, error)
 	// GetBlindedBeaconBlock returns blinded beacon block by the given slot and committee index
-	GetBlindedBeaconBlock(slot phase0.Slot, committeeIndex phase0.CommitteeIndex, graffiti, randao []byte) (*bellatrix2.BlindedBeaconBlock, error)
+	GetBlindedBeaconBlock(slot phase0.Slot, committeeIndex phase0.CommitteeIndex, graffiti, randao []byte) (interface{}, spec.DataVersion, error)
 	// SubmitBeaconBlock submit the block to the node
-	SubmitBeaconBlock(block *bellatrix.SignedBeaconBlock) error
+	SubmitBeaconBlock(block interface{}, version spec.DataVersion) error
 	// SubmitBlindedBeaconBlock submit the blinded block to the node
-	SubmitBlindedBeaconBlock(block *bellatrix2.SignedBlindedBeaconBlock) error
+	SubmitBlindedBeaconBlock(block interface{}, version spec.DataVersion) error
 }
 
 // AggregatorCalls interface has all attestation aggregator duty specific calls
 type AggregatorCalls interface {
 	// SubmitAggregateSelectionProof returns an AggregateAndProof object
-	SubmitAggregateSelectionProof(slot phase0.Slot, committeeIndex phase0.CommitteeIndex, committeeLength uint64, index phase0.ValidatorIndex, slotSig []byte) (*phase0.AggregateAndProof, error)
+	SubmitAggregateSelectionProof(slot phase0.Slot, committeeIndex phase0.CommitteeIndex, committeeLength uint64, index phase0.ValidatorIndex, slotSig []byte) (interface{}, spec.DataVersion, error)
 	// SubmitSignedAggregateSelectionProof broadcasts a signed aggregator msg
-	SubmitSignedAggregateSelectionProof(msg *phase0.SignedAggregateAndProof) error
+	SubmitSignedAggregateSelectionProof(msg interface{}, version spec.DataVersion) error
 }
 
 // SyncCommitteeCalls interface has all sync committee duty specific calls
@@ -56,7 +54,7 @@ type SyncCommitteeCalls interface {
 	// GetSyncMessageBlockRoot returns beacon block root for sync committee
 	GetSyncMessageBlockRoot(slot phase0.Slot) (phase0.Root, error)
 	// SubmitSyncMessage submits a signed sync committee msg
-	SubmitSyncMessage(msg *altair.SyncCommitteeMessage) error
+	SubmitSyncMessage(msg interface{}, version spec.DataVersion) error
 }
 
 // SyncCommitteeContributionCalls interface has all sync committee contribution duty specific calls
@@ -66,9 +64,9 @@ type SyncCommitteeContributionCalls interface {
 	// SyncCommitteeSubnetID returns sync committee subnet ID from subcommittee index
 	SyncCommitteeSubnetID(index phase0.CommitteeIndex) (uint64, error)
 	// GetSyncCommitteeContribution returns
-	GetSyncCommitteeContribution(slot phase0.Slot, subnetID uint64) (*altair.SyncCommitteeContribution, error)
+	GetSyncCommitteeContribution(slot phase0.Slot, subnetID uint64) (interface{}, spec.DataVersion, error)
 	// SubmitSignedContributionAndProof broadcasts to the network
-	SubmitSignedContributionAndProof(contribution *altair.SignedContributionAndProof) error
+	SubmitSignedContributionAndProof(contribution interface{}, version spec.DataVersion) error
 }
 
 type DomainCalls interface {
