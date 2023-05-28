@@ -85,6 +85,8 @@ const (
 	SSVPartialSignatureMsgType
 	// DKGMsgType represent all DKG related messages
 	DKGMsgType
+	// SSVVoluntaryExit is a signed init message for a voluntary exit signature
+	SSVVoluntaryExit
 )
 
 // MessageSignature includes all functions relevant for a signed message (QBFT message, post consensus msg, etc)

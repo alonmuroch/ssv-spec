@@ -18,6 +18,8 @@ const (
 	ContributionProofs
 	// ValidatorRegistrationPartialSig is a partial signature over a ValidatorRegistration object
 	ValidatorRegistrationPartialSig
+	// VoluntaryExit is a partial signature over VoluntaryExit
+	VoluntaryExit
 )
 
 type PartialSignatureMessages struct {

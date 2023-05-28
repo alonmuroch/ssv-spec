@@ -70,6 +70,12 @@ func (v *Validator) ProcessMessage(msg *types.SSVMessage) error {
 			return dutyRunner.ProcessPostConsensus(signedMsg)
 		}
 		return dutyRunner.ProcessPreConsensus(signedMsg)
+	case types.SSVVoluntaryExit:
+		exitMsg := &types.SignedExitMessage{}
+		if err := exitMsg.Decode(msg.GetData()); err != nil {
+			return errors.Wrap(err, "could not get exit Message from network Message")
+		}
+		// TODO create runner here?
 	default:
 		return errors.New("unknown msg")
 	}

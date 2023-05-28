@@ -46,6 +46,7 @@ const (
 	BNRoleSyncCommitteeContribution
 
 	BNRoleValidatorRegistration
+	BNRoleVoluntaryExit
 )
 
 // String returns name of the role

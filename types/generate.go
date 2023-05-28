@@ -17,3 +17,6 @@ package types
 
 //go:generate rm -f ./consensus_data_encoding.go
 //go:generate go run github.com/ferranbt/fastssz/sszgen --path consensus_data.go --include ./operator.go,./signer.go,./partial_sig_message.go,./beacon_types.go,$GOPATH/pkg/mod/github.com/attestantio/go-eth2-client@v0.15.8/spec/phase0,$GOPATH/pkg/mod/github.com/attestantio/go-eth2-client@v0.15.8/spec,$GOPATH/pkg/mod/github.com/attestantio/go-eth2-client@v0.15.8/spec/altair --exclude-objs Contributions,BeaconNetwork,BeaconRole
+
+//go:generate rm -f ./exit_message_encoding.go
+//go:generate go run github.com/ferranbt/fastssz/sszgen --path exit_message.go --include $GOPATH/pkg/mod/github.com/attestantio/go-eth2-client@v0.15.8/spec/phase0,./messages.go --exclude-objs PartialSigMsgType
