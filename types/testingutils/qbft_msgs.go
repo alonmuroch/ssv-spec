@@ -107,8 +107,9 @@ var TestingProposalMessageWithRoundAndRC = func(sk *bls.SecretKey, id types.Oper
 }
 var TestingProposalMessageWithIdentifierAndFullData = func(sk *bls.SecretKey, id types.OperatorID, identifier, fullData []byte) *qbft.SignedMessage {
 	msg := &qbft.Message{
-		MsgType:    qbft.ProposalMsgType,
-		Height:     qbft.FirstHeight,
+		MsgType: qbft.ProposalMsgType,
+		//TODO: this change affects qbft tests
+		Height:     TestingDutySlot,
 		Round:      qbft.FirstRound,
 		Identifier: identifier,
 		Root:       sha256.Sum256(fullData),
