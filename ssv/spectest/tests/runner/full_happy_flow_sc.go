@@ -39,17 +39,15 @@ func fullHappyFlowSyncCommitteeContributionSC() *comparable.StateComparison {
 			}
 			ret.GetBaseRunner().State.RunningInstance = &qbft.Instance{
 				State: &qbft.State{
-					Share:             testingutils.TestingShare(ks),
-					ID:                ret.GetBaseRunner().QBFTController.Identifier,
-					Round:             qbft.FirstRound,
-					Height:            qbft.Height(testingutils.TestingDutySlot),
-					LastPreparedRound: qbft.FirstRound,
-					LastPreparedValue: cdBytes,
-					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(
-						ks.Shares[1], types.OperatorID(1), ret.GetBaseRunner().QBFTController.Identifier, cdBytes,
-					),
-					Decided:      true,
-					DecidedValue: cdBytes,
+					Share:                           testingutils.TestingShare(ks),
+					ID:                              ret.GetBaseRunner().QBFTController.Identifier,
+					Round:                           qbft.FirstRound,
+					Height:                          qbft.Height(testingutils.TestingDutySlot),
+					LastPreparedRound:               qbft.FirstRound,
+					LastPreparedValue:               cdBytes,
+					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(ks.Shares[1], types.OperatorID(1), ret.GetBaseRunner().QBFTController.Identifier, cdBytes, qbft.Height(testingutils.TestingDutySlot)),
+					Decided:                         true,
+					DecidedValue:                    cdBytes,
 				},
 				StartValue: comparable.NoErrorEncoding(comparable.FixIssue178(cd, spec.DataVersionBellatrix)),
 			}
@@ -92,17 +90,15 @@ func fullHappyFlowSyncCommitteeSC() *comparable.StateComparison {
 			}
 			ret.GetBaseRunner().State.RunningInstance = &qbft.Instance{
 				State: &qbft.State{
-					Share:             testingutils.TestingShare(ks),
-					ID:                ret.GetBaseRunner().QBFTController.Identifier,
-					Round:             qbft.FirstRound,
-					Height:            qbft.Height(testingutils.TestingDutySlot),
-					LastPreparedRound: qbft.FirstRound,
-					LastPreparedValue: cdBytes,
-					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(
-						ks.Shares[1], types.OperatorID(1), ret.GetBaseRunner().QBFTController.Identifier, cdBytes,
-					),
-					Decided:      true,
-					DecidedValue: cdBytes,
+					Share:                           testingutils.TestingShare(ks),
+					ID:                              ret.GetBaseRunner().QBFTController.Identifier,
+					Round:                           qbft.FirstRound,
+					Height:                          qbft.Height(testingutils.TestingDutySlot),
+					LastPreparedRound:               qbft.FirstRound,
+					LastPreparedValue:               cdBytes,
+					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(ks.Shares[1], types.OperatorID(1), ret.GetBaseRunner().QBFTController.Identifier, cdBytes, qbft.Height(testingutils.TestingDutySlot)),
+					Decided:                         true,
+					DecidedValue:                    cdBytes,
 				},
 				StartValue: cdBytes,
 			}
@@ -145,17 +141,15 @@ func fullHappyFlowAggregatorSC() *comparable.StateComparison {
 			}
 			ret.GetBaseRunner().State.RunningInstance = &qbft.Instance{
 				State: &qbft.State{
-					Share:             testingutils.TestingShare(ks),
-					ID:                ret.GetBaseRunner().QBFTController.Identifier,
-					Round:             qbft.FirstRound,
-					Height:            qbft.Height(testingutils.TestingDutySlot),
-					LastPreparedRound: qbft.FirstRound,
-					LastPreparedValue: cdBytes,
-					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(
-						ks.Shares[1], types.OperatorID(1), ret.GetBaseRunner().QBFTController.Identifier, cdBytes,
-					),
-					Decided:      true,
-					DecidedValue: cdBytes,
+					Share:                           testingutils.TestingShare(ks),
+					ID:                              ret.GetBaseRunner().QBFTController.Identifier,
+					Round:                           qbft.FirstRound,
+					Height:                          qbft.Height(testingutils.TestingDutySlot),
+					LastPreparedRound:               qbft.FirstRound,
+					LastPreparedValue:               cdBytes,
+					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(ks.Shares[1], types.OperatorID(1), ret.GetBaseRunner().QBFTController.Identifier, cdBytes, qbft.Height(testingutils.TestingDutySlot)),
+					Decided:                         true,
+					DecidedValue:                    cdBytes,
 				},
 				StartValue: cdBytes,
 			}
@@ -201,18 +195,17 @@ func fullHappyFlowProposerSC(version spec.DataVersion) *comparable.StateComparis
 					Share:             testingutils.TestingShare(ks),
 					ID:                ret.GetBaseRunner().QBFTController.Identifier,
 					Round:             qbft.FirstRound,
-					Height:            qbft.Height(testingutils.TestingDutySlot),
+					Height:            qbft.Height(testingutils.TestingDutySlotV(version)),
 					LastPreparedRound: qbft.FirstRound,
 					LastPreparedValue: cdBytes,
 					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(
-						ks.Shares[1], types.OperatorID(1), ret.GetBaseRunner().QBFTController.Identifier, cdBytes,
-					),
+						ks.Shares[1], types.OperatorID(1), ret.GetBaseRunner().QBFTController.Identifier, cdBytes, qbft.Height(testingutils.TestingDutySlotV(version))),
 					Decided:      true,
 					DecidedValue: cdBytes,
 				},
 				StartValue: cdBytes,
 			}
-			ret.GetBaseRunner().QBFTController.Height = qbft.Height(testingutils.TestingDutySlot)
+			ret.GetBaseRunner().QBFTController.Height = qbft.Height(testingutils.TestingDutySlotV(version))
 			comparable.SetMessages(
 				ret.GetBaseRunner().State.RunningInstance,
 				testingutils.ExpectedSSVDecidingMsgsV(cd, ks, types.BNRoleProposer)[3:10],
@@ -254,18 +247,17 @@ func fullHappyFlowBlindedProposerSC(version spec.DataVersion) *comparable.StateC
 					Share:             testingutils.TestingShare(ks),
 					ID:                ret.GetBaseRunner().QBFTController.Identifier,
 					Round:             qbft.FirstRound,
-					Height:            qbft.Height(testingutils.TestingDutySlot),
+					Height:            qbft.Height(testingutils.TestingDutySlotV(version)),
 					LastPreparedRound: qbft.FirstRound,
 					LastPreparedValue: cdBytes,
 					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(
-						ks.Shares[1], types.OperatorID(1), ret.GetBaseRunner().QBFTController.Identifier, cdBytes,
-					),
+						ks.Shares[1], types.OperatorID(1), ret.GetBaseRunner().QBFTController.Identifier, cdBytes, qbft.Height(testingutils.TestingDutySlotV(version))),
 					Decided:      true,
 					DecidedValue: cdBytes,
 				},
 				StartValue: cdBytes,
 			}
-			ret.GetBaseRunner().QBFTController.Height = qbft.Height(testingutils.TestingDutySlot)
+			ret.GetBaseRunner().QBFTController.Height = qbft.Height(testingutils.TestingDutySlotV(version))
 			comparable.SetMessages(
 				ret.GetBaseRunner().State.RunningInstance,
 				testingutils.ExpectedSSVDecidingMsgsV(cd, ks, types.BNRoleProposer)[3:10],
@@ -312,7 +304,7 @@ func fullHappyFlowAttesterSC() *comparable.StateComparison {
 					LastPreparedValue: cdBytes,
 					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(
 						ks.Shares[1], types.OperatorID(1), ret.GetBaseRunner().QBFTController.Identifier, cdBytes,
-					),
+						qbft.Height(testingutils.TestingDutySlot)),
 					Decided:      true,
 					DecidedValue: cdBytes,
 				},

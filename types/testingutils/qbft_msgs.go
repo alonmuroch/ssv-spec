@@ -105,11 +105,12 @@ var TestingProposalMessageDifferentRoot = func(sk *bls.SecretKey, id types.Opera
 var TestingProposalMessageWithRoundAndRC = func(sk *bls.SecretKey, id types.OperatorID, round qbft.Round, roundChangeJustification [][]byte) *qbft.SignedMessage {
 	return TestingProposalMessageWithParams(sk, id, round, qbft.FirstHeight, TestingQBFTRootData, roundChangeJustification, nil)
 }
-var TestingProposalMessageWithIdentifierAndFullData = func(sk *bls.SecretKey, id types.OperatorID, identifier, fullData []byte) *qbft.SignedMessage {
+
+func TestingProposalMessageWithIdentifierAndFullData(sk *bls.SecretKey, id types.OperatorID, identifier, fullData []byte, height qbft.Height) *qbft.SignedMessage {
 	msg := &qbft.Message{
 		MsgType: qbft.ProposalMsgType,
 		//TODO: this change affects qbft tests
-		Height:     TestingDutySlot,
+		Height:     height,
 		Round:      qbft.FirstRound,
 		Identifier: identifier,
 		Root:       sha256.Sum256(fullData),
@@ -121,6 +122,7 @@ var TestingProposalMessageWithIdentifierAndFullData = func(sk *bls.SecretKey, id
 	ret.FullData = fullData
 	return ret
 }
+
 var TestingProposalMessageWithParams = func(
 	sk *bls.SecretKey,
 	id types.OperatorID,
