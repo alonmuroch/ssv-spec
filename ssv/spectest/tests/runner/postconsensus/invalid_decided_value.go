@@ -44,9 +44,12 @@ func InvalidDecidedValue() tests.SpecTest {
 					testingutils.SSVMsgSyncCommitteeContribution(nil, testingutils.PreConsensusContributionProofMsg(ks.Shares[3], ks.Shares[3], 3, 3)),
 
 					testingutils.SSVMsgSyncCommitteeContribution(
-						testingutils.TestingCommitMultiSignerMessageWithIdentifierAndFullData(
-							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
+						testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
+							[]*bls.SecretKey{
+								ks.Shares[1], ks.Shares[2], ks.Shares[3],
+							},
 							[]types.OperatorID{1, 2, 3},
+							qbft.Height(testingutils.TestingDutySlot),
 							testingutils.SyncCommitteeContributionMsgID,
 							consensusDataByts(types.BNRoleSyncCommitteeContribution),
 						), nil),
@@ -64,9 +67,12 @@ func InvalidDecidedValue() tests.SpecTest {
 				Duty:   &testingutils.TestingSyncCommitteeDuty,
 				Messages: []*types.SSVMessage{
 					testingutils.SSVMsgSyncCommittee(
-						testingutils.TestingCommitMultiSignerMessageWithIdentifierAndFullData(
-							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
+						testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
+							[]*bls.SecretKey{
+								ks.Shares[1], ks.Shares[2], ks.Shares[3],
+							},
 							[]types.OperatorID{1, 2, 3},
+							qbft.Height(testingutils.TestingDutySlot),
 							testingutils.SyncCommitteeMsgID,
 							consensusDataByts(types.BNRoleSyncCommittee),
 						), nil),
@@ -86,9 +92,12 @@ func InvalidDecidedValue() tests.SpecTest {
 					testingutils.SSVMsgAggregator(nil, testingutils.PreConsensusSelectionProofMsg(ks.Shares[3], ks.Shares[3], 3, 3)),
 
 					testingutils.SSVMsgAggregator(
-						testingutils.TestingCommitMultiSignerMessageWithIdentifierAndFullData(
-							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
+						testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
+							[]*bls.SecretKey{
+								ks.Shares[1], ks.Shares[2], ks.Shares[3],
+							},
 							[]types.OperatorID{1, 2, 3},
+							qbft.Height(testingutils.TestingDutySlot),
 							testingutils.AggregatorMsgID,
 							consensusDataByts(types.BNRoleAggregator),
 						), nil),
@@ -110,9 +119,12 @@ func InvalidDecidedValue() tests.SpecTest {
 					testingutils.SSVMsgProposer(nil, testingutils.PreConsensusRandaoDifferentSignerMsgV(ks.Shares[3], ks.Shares[3], 3, 3, spec.DataVersionBellatrix)),
 
 					testingutils.SSVMsgProposer(
-						testingutils.TestingCommitMultiSignerMessageWithIdentifierAndFullData(
-							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
+						testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
+							[]*bls.SecretKey{
+								ks.Shares[1], ks.Shares[2], ks.Shares[3],
+							},
 							[]types.OperatorID{1, 2, 3},
+							qbft.Height(testingutils.TestingDutySlot),
 							testingutils.ProposerMsgID,
 							consensusDataByts(types.BNRoleProposer),
 						), nil),
@@ -134,9 +146,12 @@ func InvalidDecidedValue() tests.SpecTest {
 					testingutils.SSVMsgProposer(nil, testingutils.PreConsensusRandaoDifferentSignerMsgV(ks.Shares[3], ks.Shares[3], 3, 3, spec.DataVersionBellatrix)),
 
 					testingutils.SSVMsgProposer(
-						testingutils.TestingCommitMultiSignerMessageWithIdentifierAndFullData(
-							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
+						testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
+							[]*bls.SecretKey{
+								ks.Shares[1], ks.Shares[2], ks.Shares[3],
+							},
 							[]types.OperatorID{1, 2, 3},
+							qbft.Height(testingutils.TestingDutySlot),
 							testingutils.ProposerMsgID,
 							consensusDataByts(types.BNRoleProposer),
 						), nil),
@@ -154,13 +169,17 @@ func InvalidDecidedValue() tests.SpecTest {
 				Duty:   &testingutils.TestingAttesterDuty,
 				Messages: []*types.SSVMessage{
 					testingutils.SSVMsgAttester(
-						testingutils.TestingCommitMultiSignerMessageWithIdentifierAndFullData(
-							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
+						testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
+							[]*bls.SecretKey{
+								ks.Shares[1], ks.Shares[2], ks.Shares[3],
+							},
 							[]types.OperatorID{1, 2, 3},
+							qbft.Height(testingutils.TestingDutySlot),
 							testingutils.AttesterMsgID,
 							consensusDataByts(types.BNRoleAttester),
 						), nil),
-					testingutils.SSVMsgAttester(nil, testingutils.PostConsensusAttestationMsg(ks.Shares[1], 1, qbft.FirstHeight)),
+					testingutils.SSVMsgAttester(nil, testingutils.PostConsensusAttestationMsg(ks.Shares[1], 1,
+						testingutils.TestingDutySlot)),
 				},
 				PostDutyRunnerStateRoot: "52b2d859ff7ecc6c285412cf64c18df1e0574ce7e2ead7ac8736ce0d43754ae7",
 				OutputMessages:          []*types.SignedPartialSignatureMessage{},

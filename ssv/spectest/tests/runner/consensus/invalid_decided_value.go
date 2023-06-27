@@ -2,6 +2,7 @@ package consensus
 
 import (
 	"github.com/attestantio/go-eth2-client/spec"
+	"github.com/bloxapp/ssv-spec/qbft"
 	"github.com/herumi/bls-eth-go-binary/bls"
 
 	"github.com/bloxapp/ssv-spec/ssv/spectest/tests"
@@ -39,17 +40,30 @@ func InvalidDecidedValue() tests.SpecTest {
 				Runner: testingutils.SyncCommitteeContributionRunner(ks),
 				Duty:   &testingutils.TestingSyncCommitteeContributionDuty,
 				Messages: []*types.SSVMessage{
-					testingutils.SSVMsgSyncCommitteeContribution(nil, testingutils.PreConsensusContributionProofMsg(ks.Shares[1], ks.Shares[1], 1, 1)),
-					testingutils.SSVMsgSyncCommitteeContribution(nil, testingutils.PreConsensusContributionProofMsg(ks.Shares[2], ks.Shares[2], 2, 2)),
-					testingutils.SSVMsgSyncCommitteeContribution(nil, testingutils.PreConsensusContributionProofMsg(ks.Shares[3], ks.Shares[3], 3, 3)),
+					testingutils.SSVMsgSyncCommitteeContribution(
+						nil,
+						testingutils.PreConsensusContributionProofMsg(ks.Shares[1], ks.Shares[1], 1, 1),
+					),
+					testingutils.SSVMsgSyncCommitteeContribution(
+						nil,
+						testingutils.PreConsensusContributionProofMsg(ks.Shares[2], ks.Shares[2], 2, 2),
+					),
+					testingutils.SSVMsgSyncCommitteeContribution(
+						nil,
+						testingutils.PreConsensusContributionProofMsg(ks.Shares[3], ks.Shares[3], 3, 3),
+					),
 
 					testingutils.SSVMsgSyncCommitteeContribution(
-						testingutils.TestingCommitMultiSignerMessageWithIdentifierAndFullData(
-							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
+						testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
+							[]*bls.SecretKey{
+								ks.Shares[1], ks.Shares[2], ks.Shares[3],
+							},
 							[]types.OperatorID{1, 2, 3},
+							qbft.Height(testingutils.TestingDutySlot),
 							testingutils.SyncCommitteeContributionMsgID,
 							consensusDataByts(types.BNRoleSyncCommitteeContribution),
-						), nil),
+						), nil,
+					),
 				},
 				PostDutyRunnerStateRoot: "0e966c2d067b51f57254f5e56acd98673f026c89f3d4df74bd567f9668417501",
 				OutputMessages: []*types.SignedPartialSignatureMessage{
@@ -63,12 +77,16 @@ func InvalidDecidedValue() tests.SpecTest {
 				Duty:   &testingutils.TestingSyncCommitteeDuty,
 				Messages: []*types.SSVMessage{
 					testingutils.SSVMsgSyncCommittee(
-						testingutils.TestingCommitMultiSignerMessageWithIdentifierAndFullData(
-							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
+						testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
+							[]*bls.SecretKey{
+								ks.Shares[1], ks.Shares[2], ks.Shares[3],
+							},
 							[]types.OperatorID{1, 2, 3},
+							qbft.Height(testingutils.TestingDutySlot),
 							testingutils.SyncCommitteeMsgID,
 							consensusDataByts(types.BNRoleSyncCommittee),
-						), nil),
+						), nil,
+					),
 				},
 				PostDutyRunnerStateRoot: "668d436823d89c78e929c3b0ab3b76a5f3c2b29ea04333a26722bf6530a90b41",
 				OutputMessages:          []*types.SignedPartialSignatureMessage{},
@@ -84,9 +102,12 @@ func InvalidDecidedValue() tests.SpecTest {
 					testingutils.SSVMsgAggregator(nil, testingutils.PreConsensusSelectionProofMsg(ks.Shares[3], ks.Shares[3], 3, 3)),
 
 					testingutils.SSVMsgAggregator(
-						testingutils.TestingCommitMultiSignerMessageWithIdentifierAndFullData(
-							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
+						testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
+							[]*bls.SecretKey{
+								ks.Shares[1], ks.Shares[2], ks.Shares[3],
+							},
 							[]types.OperatorID{1, 2, 3},
+							qbft.Height(testingutils.TestingDutySlot),
 							testingutils.AggregatorMsgID,
 							consensusDataByts(types.BNRoleAggregator),
 						), nil),
@@ -107,9 +128,12 @@ func InvalidDecidedValue() tests.SpecTest {
 					testingutils.SSVMsgProposer(nil, testingutils.PreConsensusRandaoDifferentSignerMsgV(ks.Shares[3], ks.Shares[3], 3, 3, spec.DataVersionBellatrix)),
 
 					testingutils.SSVMsgProposer(
-						testingutils.TestingCommitMultiSignerMessageWithIdentifierAndFullData(
-							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
+						testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
+							[]*bls.SecretKey{
+								ks.Shares[1], ks.Shares[2], ks.Shares[3],
+							},
 							[]types.OperatorID{1, 2, 3},
+							qbft.Height(testingutils.TestingDutySlot),
 							testingutils.ProposerMsgID,
 							consensusDataByts(types.BNRoleProposer),
 						), nil),
@@ -130,9 +154,12 @@ func InvalidDecidedValue() tests.SpecTest {
 					testingutils.SSVMsgProposer(nil, testingutils.PreConsensusRandaoDifferentSignerMsgV(ks.Shares[3], ks.Shares[3], 3, 3, spec.DataVersionBellatrix)),
 
 					testingutils.SSVMsgProposer(
-						testingutils.TestingCommitMultiSignerMessageWithIdentifierAndFullData(
-							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
+						testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
+							[]*bls.SecretKey{
+								ks.Shares[1], ks.Shares[2], ks.Shares[3],
+							},
 							[]types.OperatorID{1, 2, 3},
+							qbft.Height(testingutils.TestingDutySlot),
 							testingutils.ProposerMsgID,
 							consensusDataByts(types.BNRoleProposer),
 						), nil),
@@ -149,9 +176,12 @@ func InvalidDecidedValue() tests.SpecTest {
 				Duty:   &testingutils.TestingAttesterDuty,
 				Messages: []*types.SSVMessage{
 					testingutils.SSVMsgAttester(
-						testingutils.TestingCommitMultiSignerMessageWithIdentifierAndFullData(
-							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
+						testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
+							[]*bls.SecretKey{
+								ks.Shares[1], ks.Shares[2], ks.Shares[3],
+							},
 							[]types.OperatorID{1, 2, 3},
+							qbft.Height(testingutils.TestingDutySlot),
 							testingutils.AttesterMsgID,
 							consensusDataByts(types.BNRoleAttester),
 						), nil),
