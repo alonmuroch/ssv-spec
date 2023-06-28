@@ -79,7 +79,7 @@ func (test *SyncCommitteeAggregatorProofSpecTest) GetPostState() (interface{}, e
 
 func (test *SyncCommitteeAggregatorProofSpecTest) overrideStateComparison(t *testing.T) {
 	// override state comparison
-	postState, err := comparable.UnmarshalSSVStateComparison(test, &ssv.SyncCommitteeAggregatorRunner{})
+	postState, err := comparable.UnmarshalSSVStateComparison(test, &ssv.State{})
 	require.NoError(t, err)
 
 	r, err2 := postState.GetRoot()
