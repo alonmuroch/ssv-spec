@@ -2,8 +2,8 @@ package consensus
 
 import (
 	"fmt"
-
 	"github.com/attestantio/go-eth2-client/spec"
+	"github.com/bloxapp/ssv-spec/qbft"
 	"github.com/herumi/bls-eth-go-binary/bls"
 
 	"github.com/bloxapp/ssv-spec/ssv/spectest/tests"
@@ -37,7 +37,7 @@ func FutureDecided() tests.SpecTest {
 						testingutils.TestingCommitMultiSignerMessageWithHeightAndIdentifier(
 							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
 							[]types.OperatorID{1, 2, 3},
-							2,
+							testingutils.TestingDutySlot+1,
 							getID(types.BNRoleSyncCommitteeContribution),
 						),
 						nil,
@@ -59,7 +59,7 @@ func FutureDecided() tests.SpecTest {
 						testingutils.TestingCommitMultiSignerMessageWithHeightAndIdentifier(
 							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
 							[]types.OperatorID{1, 2, 3},
-							2,
+							testingutils.TestingDutySlot+1,
 							getID(types.BNRoleSyncCommittee),
 						),
 						nil,
@@ -82,7 +82,7 @@ func FutureDecided() tests.SpecTest {
 						testingutils.TestingCommitMultiSignerMessageWithHeightAndIdentifier(
 							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
 							[]types.OperatorID{1, 2, 3},
-							2,
+							testingutils.TestingDutySlot+1,
 							getID(types.BNRoleAggregator),
 						),
 						nil,
@@ -104,7 +104,7 @@ func FutureDecided() tests.SpecTest {
 						testingutils.TestingCommitMultiSignerMessageWithHeightAndIdentifier(
 							[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
 							[]types.OperatorID{1, 2, 3},
-							2,
+							testingutils.TestingDutySlot+1,
 							getID(types.BNRoleAttester),
 						),
 						nil,
@@ -132,7 +132,7 @@ func FutureDecided() tests.SpecTest {
 					testingutils.TestingCommitMultiSignerMessageWithHeightAndIdentifier(
 						[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
 						[]types.OperatorID{1, 2, 3},
-						2,
+						qbft.Height(testingutils.TestingDutySlotV(version)+1),
 						getID(types.BNRoleProposer),
 					),
 					nil,
@@ -161,7 +161,7 @@ func FutureDecided() tests.SpecTest {
 					testingutils.TestingCommitMultiSignerMessageWithHeightAndIdentifier(
 						[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
 						[]types.OperatorID{1, 2, 3},
-						2,
+						qbft.Height(testingutils.TestingDutySlotV(version)+1),
 						getID(types.BNRoleProposer),
 					),
 					nil,
