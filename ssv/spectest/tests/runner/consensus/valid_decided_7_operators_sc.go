@@ -39,7 +39,7 @@ func validDecided7OperatorsSyncCommitteeContributionSC() *comparable.StateCompar
 					Share:             testingutils.TestingShare(ks),
 					ID:                ret.GetBaseRunner().QBFTController.Identifier,
 					Round:             qbft.FirstRound,
-					Height:            qbft.FirstHeight,
+					Height:            testingutils.TestingDutySlot,
 					LastPreparedRound: qbft.FirstRound,
 					LastPreparedValue: cdBytes,
 					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(
@@ -55,6 +55,7 @@ func validDecided7OperatorsSyncCommitteeContributionSC() *comparable.StateCompar
 				testingutils.ExpectedSSVDecidingMsgsV(cd, ks, types.BNRoleSyncCommitteeContribution)[5:16],
 			)
 			ret.GetBaseRunner().QBFTController.StoredInstances = append(ret.GetBaseRunner().QBFTController.StoredInstances, ret.GetBaseRunner().State.RunningInstance)
+			ret.GetBaseRunner().QBFTController.Height = testingutils.TestingDutySlot
 			return ret
 		}(),
 	}
@@ -87,7 +88,7 @@ func validDecided7OperatorsSyncCommitteeSC() *comparable.StateComparison {
 					Share:             testingutils.TestingShare(ks),
 					ID:                ret.GetBaseRunner().QBFTController.Identifier,
 					Round:             qbft.FirstRound,
-					Height:            qbft.FirstHeight,
+					Height:            testingutils.TestingDutySlot,
 					LastPreparedRound: qbft.FirstRound,
 					LastPreparedValue: cdBytes,
 					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(
@@ -103,6 +104,7 @@ func validDecided7OperatorsSyncCommitteeSC() *comparable.StateComparison {
 				testingutils.ExpectedSSVDecidingMsgsV(cd, ks, types.BNRoleSyncCommittee)[:11],
 			)
 			ret.GetBaseRunner().QBFTController.StoredInstances = append(ret.GetBaseRunner().QBFTController.StoredInstances, ret.GetBaseRunner().State.RunningInstance)
+			ret.GetBaseRunner().QBFTController.Height = testingutils.TestingDutySlot
 			return ret
 		}(),
 	}
@@ -136,7 +138,7 @@ func validDecided7OperatorsAggregatorSC() *comparable.StateComparison {
 					Share:             testingutils.TestingShare(ks),
 					ID:                ret.GetBaseRunner().QBFTController.Identifier,
 					Round:             qbft.FirstRound,
-					Height:            qbft.FirstHeight,
+					Height:            testingutils.TestingDutySlot,
 					LastPreparedRound: qbft.FirstRound,
 					LastPreparedValue: cdBytes,
 					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(
@@ -152,6 +154,7 @@ func validDecided7OperatorsAggregatorSC() *comparable.StateComparison {
 				testingutils.ExpectedSSVDecidingMsgsV(cd, ks, types.BNRoleAggregator)[5:16],
 			)
 			ret.GetBaseRunner().QBFTController.StoredInstances = append(ret.GetBaseRunner().QBFTController.StoredInstances, ret.GetBaseRunner().State.RunningInstance)
+			ret.GetBaseRunner().QBFTController.Height = testingutils.TestingDutySlot
 			return ret
 		}(),
 	}
@@ -185,7 +188,7 @@ func validDecided7OperatorsAttesterSC() *comparable.StateComparison {
 					Share:             testingutils.TestingShare(ks),
 					ID:                ret.GetBaseRunner().QBFTController.Identifier,
 					Round:             qbft.FirstRound,
-					Height:            qbft.FirstHeight,
+					Height:            testingutils.TestingDutySlot,
 					LastPreparedRound: qbft.FirstRound,
 					LastPreparedValue: cdBytes,
 					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(
@@ -201,6 +204,7 @@ func validDecided7OperatorsAttesterSC() *comparable.StateComparison {
 				testingutils.ExpectedSSVDecidingMsgsV(cd, ks, types.BNRoleAttester)[:11],
 			)
 			ret.GetBaseRunner().QBFTController.StoredInstances = append(ret.GetBaseRunner().QBFTController.StoredInstances, ret.GetBaseRunner().State.RunningInstance)
+			ret.GetBaseRunner().QBFTController.Height = testingutils.TestingDutySlot
 			return ret
 		}(),
 	}
@@ -234,12 +238,12 @@ func validDecided7OperatorsProposerSC(version spec.DataVersion) *comparable.Stat
 					Share:             testingutils.TestingShare(ks),
 					ID:                ret.GetBaseRunner().QBFTController.Identifier,
 					Round:             qbft.FirstRound,
-					Height:            qbft.FirstHeight,
+					Height:            qbft.Height(testingutils.TestingDutySlotV(version)),
 					LastPreparedRound: qbft.FirstRound,
 					LastPreparedValue: cdBytes,
 					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(
 						ks.Shares[1], types.OperatorID(1), ret.GetBaseRunner().QBFTController.Identifier, cdBytes,
-						qbft.Height(testingutils.TestingDutySlot)),
+						qbft.Height(testingutils.TestingDutySlotV(version))),
 					Decided:      true,
 					DecidedValue: cdBytes,
 				},
@@ -250,6 +254,7 @@ func validDecided7OperatorsProposerSC(version spec.DataVersion) *comparable.Stat
 				testingutils.ExpectedSSVDecidingMsgsV(cd, ks, types.BNRoleProposer)[5:16],
 			)
 			ret.GetBaseRunner().QBFTController.StoredInstances = append(ret.GetBaseRunner().QBFTController.StoredInstances, ret.GetBaseRunner().State.RunningInstance)
+			ret.GetBaseRunner().QBFTController.Height = qbft.Height(testingutils.TestingDutySlotV(version))
 			return ret
 		}(),
 	}
@@ -283,12 +288,12 @@ func validDecided7OperatorsBlindedProposerSC(version spec.DataVersion) *comparab
 					Share:             testingutils.TestingShare(ks),
 					ID:                ret.GetBaseRunner().QBFTController.Identifier,
 					Round:             qbft.FirstRound,
-					Height:            qbft.FirstHeight,
+					Height:            qbft.Height(testingutils.TestingDutySlotV(version)),
 					LastPreparedRound: qbft.FirstRound,
 					LastPreparedValue: cdBytes,
 					ProposalAcceptedForCurrentRound: testingutils.TestingProposalMessageWithIdentifierAndFullData(
 						ks.Shares[1], types.OperatorID(1), ret.GetBaseRunner().QBFTController.Identifier, cdBytes,
-						qbft.Height(testingutils.TestingDutySlot)),
+						qbft.Height(testingutils.TestingDutySlotV(version))),
 					Decided:      true,
 					DecidedValue: cdBytes,
 				},
@@ -299,6 +304,7 @@ func validDecided7OperatorsBlindedProposerSC(version spec.DataVersion) *comparab
 				testingutils.ExpectedSSVDecidingMsgsV(cd, ks, types.BNRoleProposer)[5:16],
 			)
 			ret.GetBaseRunner().QBFTController.StoredInstances = append(ret.GetBaseRunner().QBFTController.StoredInstances, ret.GetBaseRunner().State.RunningInstance)
+			ret.GetBaseRunner().QBFTController.Height = qbft.Height(testingutils.TestingDutySlotV(version))
 			return ret
 		}(),
 	}
