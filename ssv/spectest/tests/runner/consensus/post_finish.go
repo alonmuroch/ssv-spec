@@ -163,7 +163,7 @@ func PostFinish() tests.SpecTest {
 					testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
 						[]*bls.SecretKey{ks.Shares[4]},
 						[]types.OperatorID{4},
-						qbft.Height(testingutils.TestingDutySlot),
+						qbft.Height(testingutils.TestingDutySlotV(version)),
 						testingutils.ProposerMsgID,
 						testingutils.TestProposerConsensusDataBytsV(version),
 					), nil),
@@ -197,7 +197,7 @@ func PostFinish() tests.SpecTest {
 					testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
 						[]*bls.SecretKey{ks.Shares[4]},
 						[]types.OperatorID{4},
-						qbft.Height(testingutils.TestingDutySlot),
+						qbft.Height(testingutils.TestingDutySlotV(version)),
 						testingutils.ProposerMsgID,
 						testingutils.TestProposerBlindedBlockConsensusDataBytsV(version),
 					), nil),
