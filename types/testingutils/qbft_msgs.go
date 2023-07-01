@@ -295,10 +295,11 @@ var TestingCommitMessageWrongRoot = func(sk *bls.SecretKey, id types.OperatorID)
 var TestingCommitMessageWrongHeight = func(sk *bls.SecretKey, id types.OperatorID) *qbft.SignedMessage {
 	return TestingCommitMessageWithParams(sk, id, qbft.FirstRound, 10, TestingIdentifier, DifferentRoot)
 }
-var TestingCommitMessageWithIdentifierAndFullData = func(sk *bls.SecretKey, id types.OperatorID, identifier, fullData []byte) *qbft.SignedMessage {
+
+func TestingCommitMessageWithHeightIdentifierAndFullData(sk *bls.SecretKey, id types.OperatorID, height qbft.Height, identifier, fullData []byte) *qbft.SignedMessage {
 	msg := &qbft.Message{
 		MsgType:    qbft.CommitMsgType,
-		Height:     qbft.FirstHeight,
+		Height:     height,
 		Round:      qbft.FirstRound,
 		Identifier: identifier,
 		Root:       sha256.Sum256(fullData),
@@ -307,6 +308,7 @@ var TestingCommitMessageWithIdentifierAndFullData = func(sk *bls.SecretKey, id t
 	ret.FullData = fullData
 	return ret
 }
+
 var TestingCommitMessageWithIdentifierAndRoot = func(sk *bls.SecretKey, id types.OperatorID, identifier []byte, root [32]byte) *qbft.SignedMessage {
 	msg := &qbft.Message{
 		MsgType:    qbft.CommitMsgType,

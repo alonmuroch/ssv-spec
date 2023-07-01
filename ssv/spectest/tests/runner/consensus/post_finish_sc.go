@@ -59,9 +59,7 @@ func postFinishSyncCommitteeContributionSC() *comparable.StateComparison {
 				append(
 					testingutils.ExpectedSSVDecidingMsgsV(cd, ks, types.BNRoleSyncCommitteeContribution)[3:10],
 					testingutils.SSVMsgSyncCommitteeContribution(
-						testingutils.TestingCommitMessageWithIdentifierAndFullData(
-							ks.Shares[4], types.OperatorID(4), testingutils.SyncCommitteeContributionMsgID, cdBytes,
-						),
+						testingutils.TestingCommitMessageWithHeightIdentifierAndFullData(ks.Shares[4], types.OperatorID(4), testingutils.TestingDutySlot, testingutils.SyncCommitteeContributionMsgID, cdBytes),
 						nil,
 					),
 				),
@@ -120,9 +118,7 @@ func postFinishSyncCommitteeSC() *comparable.StateComparison {
 				append(
 					testingutils.ExpectedSSVDecidingMsgsV(cd, ks, types.BNRoleSyncCommittee)[:7],
 					testingutils.SSVMsgSyncCommittee(
-						testingutils.TestingCommitMessageWithIdentifierAndFullData(
-							ks.Shares[4], types.OperatorID(4), testingutils.SyncCommitteeMsgID, cdBytes,
-						),
+						testingutils.TestingCommitMessageWithHeightIdentifierAndFullData(ks.Shares[4], types.OperatorID(4), testingutils.TestingDutySlot, testingutils.SyncCommitteeMsgID, cdBytes),
 						nil,
 					),
 				),
@@ -181,9 +177,7 @@ func postFinishAggregatorSC() *comparable.StateComparison {
 				append(
 					testingutils.ExpectedSSVDecidingMsgsV(cd, ks, types.BNRoleAggregator)[3:10],
 					testingutils.SSVMsgAggregator(
-						testingutils.TestingCommitMessageWithIdentifierAndFullData(
-							ks.Shares[4], types.OperatorID(4), testingutils.AggregatorMsgID, cdBytes,
-						),
+						testingutils.TestingCommitMessageWithHeightIdentifierAndFullData(ks.Shares[4], types.OperatorID(4), testingutils.TestingDutySlot, testingutils.AggregatorMsgID, cdBytes),
 						nil,
 					),
 				),
@@ -242,9 +236,7 @@ func postFinishAttesterSC() *comparable.StateComparison {
 				append(
 					testingutils.ExpectedSSVDecidingMsgsV(cd, ks, types.BNRoleAttester)[:7],
 					testingutils.SSVMsgAttester(
-						testingutils.TestingCommitMessageWithIdentifierAndFullData(
-							ks.Shares[4], types.OperatorID(4), testingutils.AttesterMsgID, cdBytes,
-						),
+						testingutils.TestingCommitMessageWithHeightIdentifierAndFullData(ks.Shares[4], types.OperatorID(4), testingutils.TestingDutySlot, testingutils.AttesterMsgID, cdBytes),
 						nil,
 					),
 				),
@@ -303,9 +295,7 @@ func postFinishProposerSC(version spec.DataVersion) *comparable.StateComparison 
 				append(
 					testingutils.ExpectedSSVDecidingMsgsV(cd, ks, types.BNRoleProposer)[3:10],
 					testingutils.SSVMsgProposer(
-						testingutils.TestingCommitMessageWithIdentifierAndFullData(
-							ks.Shares[4], types.OperatorID(4), testingutils.ProposerMsgID, cdBytes,
-						),
+						testingutils.TestingCommitMessageWithHeightIdentifierAndFullData(ks.Shares[4], types.OperatorID(4), testingutils.TestingDutySlot, testingutils.ProposerMsgID, cdBytes),
 						nil,
 					),
 				),
@@ -364,9 +354,7 @@ func postFinishBlindedProposerSC(version spec.DataVersion) *comparable.StateComp
 				append(
 					testingutils.ExpectedSSVDecidingMsgsV(cd, ks, types.BNRoleProposer)[3:10],
 					testingutils.SSVMsgProposer(
-						testingutils.TestingCommitMessageWithIdentifierAndFullData(
-							ks.Shares[4], types.OperatorID(4), testingutils.ProposerMsgID, cdBytes,
-						),
+						testingutils.TestingCommitMessageWithHeightIdentifierAndFullData(ks.Shares[4], types.OperatorID(4), testingutils.TestingDutySlot, testingutils.ProposerMsgID, cdBytes),
 						nil,
 					),
 				),
