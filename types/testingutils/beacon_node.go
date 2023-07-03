@@ -35,7 +35,7 @@ func GetSSZRootNoError(obj ssz.HashRoot) string {
 }
 
 var TestingAttestationData = &phase0.AttestationData{
-	Slot:            12,
+	Slot:            TestingDutySlot,
 	Index:           3,
 	BeaconBlockRoot: phase0.Root{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2},
 	Source: &phase0.Checkpoint{
@@ -49,6 +49,24 @@ var TestingAttestationData = &phase0.AttestationData{
 }
 var TestingAttestationDataBytes = func() []byte {
 	ret, _ := TestingAttestationData.MarshalSSZ()
+	return ret
+}()
+
+var TestingAttestationNextEpochData = &phase0.AttestationData{
+	Slot:            TestingDutySlot2,
+	Index:           3,
+	BeaconBlockRoot: phase0.Root{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2},
+	Source: &phase0.Checkpoint{
+		Epoch: 0,
+		Root:  phase0.Root{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2},
+	},
+	Target: &phase0.Checkpoint{
+		Epoch: 1,
+		Root:  phase0.Root{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2},
+	},
+}
+var TestingAttestationNextEpochDataBytes = func() []byte {
+	ret, _ := TestingAttestationNextEpochData.MarshalSSZ()
 	return ret
 }()
 
