@@ -11,6 +11,7 @@ import (
 )
 
 // PostFutureDecided tests starting duty after a future decided
+// This can happen if we receive a future decided message from the network and we are behind.
 func PostFutureDecided() tests.SpecTest {
 	ks := testingutils.Testing4SharesSet()
 
@@ -22,17 +23,17 @@ func PostFutureDecided() tests.SpecTest {
 			r.GetBaseRunner().QBFTController.GetConfig(),
 			r.GetBaseRunner().Share,
 			r.GetBaseRunner().QBFTController.Identifier,
-			qbft.FirstHeight)
+			qbft.Height(duty.Slot))
 		r.GetBaseRunner().QBFTController.StoredInstances = append(r.GetBaseRunner().QBFTController.StoredInstances, r.GetBaseRunner().State.RunningInstance)
 
 		futureDecidedInstance := qbft.NewInstance(
 			r.GetBaseRunner().QBFTController.GetConfig(),
 			r.GetBaseRunner().Share,
 			r.GetBaseRunner().QBFTController.Identifier,
-			50)
+			qbft.Height(duty.Slot+50))
 		futureDecidedInstance.State.Decided = true
 		r.GetBaseRunner().QBFTController.StoredInstances = append(r.GetBaseRunner().QBFTController.StoredInstances, futureDecidedInstance)
-		r.GetBaseRunner().QBFTController.Height = 50
+		r.GetBaseRunner().QBFTController.Height = qbft.Height(duty.Slot + 50)
 		return r
 	}
 
@@ -40,45 +41,42 @@ func PostFutureDecided() tests.SpecTest {
 		Name: "new duty post future decided",
 		Tests: []*StartNewRunnerDutySpecTest{
 			{
-				Name:                    "sync committee aggregator",
-				Runner:                  futureDecide(testingutils.SyncCommitteeContributionRunner(ks), &testingutils.TestingSyncCommitteeContributionNexEpochDuty),
-				Duty:                    &testingutils.TestingSyncCommitteeContributionNexEpochDuty,
-				PostDutyRunnerStateRoot: "7f03ca55debd0d503e62817ea81f23f3b01b77b10881c26ba087e5d34b2b5a12",
+				Name:   "sync committee aggregator",
+				Runner: futureDecide(testingutils.SyncCommitteeContributionRunner(ks), &testingutils.TestingSyncCommitteeContributionNexEpochDuty),
+				Duty:   &testingutils.TestingSyncCommitteeContributionNexEpochDuty,
 				OutputMessages: []*types.SignedPartialSignatureMessage{
 					testingutils.PreConsensusContributionProofNextEpochMsg(ks.Shares[1], ks.Shares[1], 1, 1), // broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:                    "sync committee",
-				Runner:                  futureDecide(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
-				Duty:                    &testingutils.TestingSyncCommitteeDuty,
-				PostDutyRunnerStateRoot: "d39238cb763ef4e6a49544657c8ae160822f85fb14a6e1769ce7c0a387156694",
-				OutputMessages:          []*types.SignedPartialSignatureMessage{},
+				Name:           "sync committee",
+				Runner:         futureDecide(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
+				Duty:           &testingutils.TestingSyncCommitteeDuty,
+				OutputMessages: []*types.SignedPartialSignatureMessage{},
+				ExpectedError:  "can't start new duty runner instance for duty: could not start new QBFT instance: invalid instance height",
 			},
 			{
-				Name:                    "aggregator",
-				Runner:                  futureDecide(testingutils.AggregatorRunner(ks), &testingutils.TestingAggregatorDutyNextEpoch),
-				Duty:                    &testingutils.TestingAggregatorDutyNextEpoch,
-				PostDutyRunnerStateRoot: "c16ced021b484d7951b2aeb1e4baf7bcf9363816e21750b514cbc4306b2e053f",
+				Name:   "aggregator",
+				Runner: futureDecide(testingutils.AggregatorRunner(ks), &testingutils.TestingAggregatorDutyNextEpoch),
+				Duty:   &testingutils.TestingAggregatorDutyNextEpoch,
 				OutputMessages: []*types.SignedPartialSignatureMessage{
 					testingutils.PreConsensusSelectionProofNextEpochMsg(ks.Shares[1], ks.Shares[1], 1, 1), // broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:                    "proposer",
-				Runner:                  futureDecide(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix)),
-				Duty:                    testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix),
-				PostDutyRunnerStateRoot: "173941649af8d38d55ed1ce3fdd81f003d80784ea500bd23aa740f876a787c9e",
+				Name:   "proposer",
+				Runner: futureDecide(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix)),
+				Duty:   testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix),
 				OutputMessages: []*types.SignedPartialSignatureMessage{
 					testingutils.PreConsensusRandaoNextEpochMsgV(ks.Shares[1], 1, spec.DataVersionBellatrix), // broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:                    "attester",
-				Runner:                  futureDecide(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
-				Duty:                    &testingutils.TestingAttesterDuty,
-				PostDutyRunnerStateRoot: "d4e685006411ee23178051e0a534df7482edd3bd5a04c36f12f44cf408290989",
-				OutputMessages:          []*types.SignedPartialSignatureMessage{},
+				Name:           "attester",
+				Runner:         futureDecide(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
+				Duty:           &testingutils.TestingAttesterDuty,
+				OutputMessages: []*types.SignedPartialSignatureMessage{},
+				ExpectedError:  "can't start new duty runner instance for duty: could not start new QBFT instance: invalid instance height",
 			},
 		},
 	}
