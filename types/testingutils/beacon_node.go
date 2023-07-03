@@ -322,6 +322,17 @@ var TestingAttesterDuty = types.Duty{
 	ValidatorCommitteeIndex: 11,
 }
 
+var TestingAttesterDutyNextEpoch = types.Duty{
+	Type:                    types.BNRoleAttester,
+	PubKey:                  TestingValidatorPubKey,
+	Slot:                    TestingDutySlot2,
+	ValidatorIndex:          TestingValidatorIndex,
+	CommitteeIndex:          3,
+	CommitteesAtSlot:        36,
+	CommitteeLength:         128,
+	ValidatorCommitteeIndex: 11,
+}
+
 var TestingAggregatorDuty = types.Duty{
 	Type:                    types.BNRoleAggregator,
 	PubKey:                  TestingValidatorPubKey,
@@ -349,6 +360,18 @@ var TestingSyncCommitteeDuty = types.Duty{
 	Type:                          types.BNRoleSyncCommittee,
 	PubKey:                        TestingValidatorPubKey,
 	Slot:                          TestingDutySlot,
+	ValidatorIndex:                TestingValidatorIndex,
+	CommitteeIndex:                3,
+	CommitteesAtSlot:              36,
+	CommitteeLength:               128,
+	ValidatorCommitteeIndex:       11,
+	ValidatorSyncCommitteeIndices: TestingContributionProofIndexes,
+}
+
+var TestingSyncCommitteeDutyNextEpoch = types.Duty{
+	Type:                          types.BNRoleSyncCommittee,
+	PubKey:                        TestingValidatorPubKey,
+	Slot:                          TestingDutySlot2,
 	ValidatorIndex:                TestingValidatorIndex,
 	CommitteeIndex:                3,
 	CommitteesAtSlot:              36,
@@ -441,7 +464,9 @@ func (bn *TestingBeaconNode) GetBeaconNetwork() types.BeaconNetwork {
 
 // GetAttestationData returns attestation data by the given slot and committee index
 func (bn *TestingBeaconNode) GetAttestationData(slot phase0.Slot, committeeIndex phase0.CommitteeIndex) (ssz.Marshaler, spec.DataVersion, error) {
-	return TestingAttestationData, spec.DataVersionPhase0, nil
+	data := *TestingAttestationData
+	data.Slot = slot
+	return &data, spec.DataVersionPhase0, nil
 }
 
 // SubmitAttestation submit the attestation to the node
