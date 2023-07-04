@@ -12,9 +12,6 @@ import (
 	"github.com/bloxapp/ssv-spec/types/testingutils/comparable"
 )
 
-// TODO: should a future decided message stop previous instances? currently we return an error but should we?
-// A future decided means that no one will process our old instance messages...
-
 // futureDecidedSyncCommitteeContributionSC returns runner with 2 stored instances.
 // One undecided and one decided for height 13.
 // This is because we are processing messages for height 13 while height 12 is still running.

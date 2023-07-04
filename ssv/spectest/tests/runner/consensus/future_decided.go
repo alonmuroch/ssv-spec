@@ -11,7 +11,11 @@ import (
 	"github.com/bloxapp/ssv-spec/types/testingutils"
 )
 
-// FutureDecided tests a running instance at FirstHeight, then processing a decided msg from height 2 and returning decided but doesn't move to post consensus as it's not the same instance decided
+// TODO: should a future decided message stop previous instances? currently we return an error but should we?
+// A future decided means that no one will process our old instance messages...
+
+// FutureDecided tests a running instance at a certain height, then processing a decided msg from a larger height.
+// then returning an error and don't move to post consensus as it's not the same instance decided
 func FutureDecided() tests.SpecTest {
 	ks := testingutils.Testing4SharesSet()
 
