@@ -4,6 +4,7 @@ import (
 	"github.com/attestantio/go-eth2-client/spec"
 	"github.com/bloxapp/ssv-spec/qbft"
 	"github.com/bloxapp/ssv-spec/ssv"
+	"github.com/bloxapp/ssv-spec/ssv/spectest/tests"
 	"github.com/bloxapp/ssv-spec/types"
 	"github.com/bloxapp/ssv-spec/types/testingutils"
 )
@@ -13,7 +14,7 @@ import (
 // - Runner finishes the duty
 // - Runner is assigned the same duty again
 // TODO - Does it make sense that the runner starts? Does it make sense that duties with precon phase don't return an error?
-func DuplicateDutyFinished() *MultiStartNewRunnerDutySpecTest {
+func DuplicateDutyFinished() tests.SpecTest {
 	ks := testingutils.Testing4SharesSet()
 
 	finishRunner := func(r ssv.Runner, duty *types.Duty) ssv.Runner {
