@@ -38,6 +38,9 @@ func DuplicateDutyFinished() tests.SpecTest {
 				Name:   "sync committee aggregator",
 				Runner: finishRunner(testingutils.SyncCommitteeContributionRunner(ks), &testingutils.TestingSyncCommitteeContributionNexEpochDuty),
 				Duty:   &testingutils.TestingSyncCommitteeContributionNexEpochDuty,
+				OutputMessages: []*types.SignedPartialSignatureMessage{
+					testingutils.PreConsensusContributionProofNextEpochMsg(ks.Shares[1], ks.Shares[1], 1, 1), // broadcasts when starting a new duty
+				},
 			},
 			{
 				Name:          "sync committee",
@@ -49,11 +52,18 @@ func DuplicateDutyFinished() tests.SpecTest {
 				Name:   "aggregator",
 				Runner: finishRunner(testingutils.AggregatorRunner(ks), &testingutils.TestingAggregatorDutyNextEpoch),
 				Duty:   &testingutils.TestingAggregatorDutyNextEpoch,
+				OutputMessages: []*types.SignedPartialSignatureMessage{
+					testingutils.PreConsensusSelectionProofNextEpochMsg(ks.Shares[1], ks.Shares[1], 1, 1), // broadcasts when starting a new duty
+				},
 			},
 			{
-				Name:   "proposer",
-				Runner: finishRunner(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix)),
-				Duty:   testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix),
+				Name: "proposer",
+				Runner: finishRunner(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyNextEpochV(
+					spec.DataVersionCapella)),
+				Duty: testingutils.TestingProposerDutyNextEpochV(spec.DataVersionCapella),
+				OutputMessages: []*types.SignedPartialSignatureMessage{
+					testingutils.PreConsensusRandaoNextEpochMsgV(ks.Shares[1], 1, spec.DataVersionCapella), // broadcasts when starting a new duty
+				},
 			},
 			{
 				Name:          "attester",
