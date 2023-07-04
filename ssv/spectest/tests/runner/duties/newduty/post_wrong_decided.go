@@ -59,10 +59,11 @@ func PostWrongDecided() tests.SpecTest {
 				},
 			},
 			{
-				Name:          "sync committee",
-				Runner:        decideWrong(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
-				Duty:          &testingutils.TestingSyncCommitteeDuty,
-				ExpectedError: "can't start new duty runner instance for duty: could not start new QBFT instance: attempting to start an instace with a past or current height",
+				Name:           "sync committee",
+				Runner:         decideWrong(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
+				Duty:           &testingutils.TestingSyncCommitteeDuty,
+				OutputMessages: []*types.SignedPartialSignatureMessage{},
+				ExpectedError:  "can't start new duty runner instance for duty: could not start new QBFT instance: attempting to start an instace with a past or current height",
 			},
 			{
 				Name:   "aggregator",
@@ -81,10 +82,11 @@ func PostWrongDecided() tests.SpecTest {
 				},
 			},
 			{
-				Name:          "attester",
-				Runner:        decideWrong(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
-				Duty:          &testingutils.TestingAttesterDuty,
-				ExpectedError: "can't start new duty runner instance for duty: could not start new QBFT instance: attempting to start an instace with a past or current height",
+				Name:           "attester",
+				Runner:         decideWrong(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
+				Duty:           &testingutils.TestingAttesterDuty,
+				OutputMessages: []*types.SignedPartialSignatureMessage{},
+				ExpectedError:  "can't start new duty runner instance for duty: could not start new QBFT instance: attempting to start an instace with a past or current height",
 			},
 		},
 	}

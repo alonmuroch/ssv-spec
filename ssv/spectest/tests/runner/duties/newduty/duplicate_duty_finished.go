@@ -43,10 +43,11 @@ func DuplicateDutyFinished() tests.SpecTest {
 				},
 			},
 			{
-				Name:          "sync committee",
-				Runner:        finishRunner(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
-				Duty:          &testingutils.TestingSyncCommitteeDuty,
-				ExpectedError: "can't start new duty runner instance for duty: could not start new QBFT instance: instance already running",
+				Name:           "sync committee",
+				Runner:         finishRunner(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
+				Duty:           &testingutils.TestingSyncCommitteeDuty,
+				OutputMessages: []*types.SignedPartialSignatureMessage{},
+				ExpectedError:  "can't start new duty runner instance for duty: could not start new QBFT instance: instance already running",
 			},
 			{
 				Name:   "aggregator",
@@ -66,10 +67,11 @@ func DuplicateDutyFinished() tests.SpecTest {
 				},
 			},
 			{
-				Name:          "attester",
-				Runner:        finishRunner(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
-				Duty:          &testingutils.TestingAttesterDuty,
-				ExpectedError: "can't start new duty runner instance for duty: could not start new QBFT instance: instance already running",
+				Name:           "attester",
+				Runner:         finishRunner(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
+				Duty:           &testingutils.TestingAttesterDuty,
+				OutputMessages: []*types.SignedPartialSignatureMessage{},
+				ExpectedError:  "can't start new duty runner instance for duty: could not start new QBFT instance: instance already running",
 			},
 		},
 	}
