@@ -33,6 +33,8 @@ func PostInvalidDecided() tests.SpecTest {
 		return byts
 	}
 
+	// TODO: not sure what is the value of doing this. We initialize the runner with an impossible decided value.
+	// Maybe we should ensure that `ValidateDecided()` doesn't let the runner enter this state and delete the test?
 	decideWrong := func(r ssv.Runner, duty *types.Duty) ssv.Runner {
 		r.GetBaseRunner().State = ssv.NewRunnerState(3, duty)
 		r.GetBaseRunner().State.RunningInstance = qbft.NewInstance(
@@ -57,43 +59,40 @@ func PostInvalidDecided() tests.SpecTest {
 				Name: "sync committee aggregator",
 				Runner: decideWrong(testingutils.SyncCommitteeContributionRunner(ks),
 					&testingutils.TestingSyncCommitteeContributionDuty),
-				Duty:                    &testingutils.TestingSyncCommitteeContributionNexEpochDuty,
-				PostDutyRunnerStateRoot: "624a66d292de93e598225ec9988fa7dacc57ef072c21d781c5d46646827915ac",
+				Duty: &testingutils.TestingSyncCommitteeContributionNexEpochDuty,
 				OutputMessages: []*types.SignedPartialSignatureMessage{
-					testingutils.PreConsensusContributionProofMsg(ks.Shares[1], ks.Shares[1], 1, 1), // broadcasts when starting a new duty
+					testingutils.PreConsensusContributionProofNextEpochMsg(ks.Shares[1], ks.Shares[1], 1, 1),
+					// broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:                    "sync committee",
-				Runner:                  decideWrong(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
-				Duty:                    &testingutils.TestingSyncCommitteeDutyNextEpoch,
-				PostDutyRunnerStateRoot: "7ebeff8c3bc9728187dc49f7bc1257d36f5ed4bbc84f10c600ced9a89a0d473b",
-				OutputMessages:          []*types.SignedPartialSignatureMessage{},
+				Name:           "sync committee",
+				Runner:         decideWrong(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
+				Duty:           &testingutils.TestingSyncCommitteeDutyNextEpoch,
+				OutputMessages: []*types.SignedPartialSignatureMessage{},
 			},
 			{
-				Name:                    "aggregator",
-				Runner:                  decideWrong(testingutils.AggregatorRunner(ks), &testingutils.TestingAggregatorDuty),
-				Duty:                    &testingutils.TestingAggregatorDutyNextEpoch,
-				PostDutyRunnerStateRoot: "c117e260bcedcce7d164ac6c912cd4a911de58a6b3e97e99c982479200566d1b",
+				Name:   "aggregator",
+				Runner: decideWrong(testingutils.AggregatorRunner(ks), &testingutils.TestingAggregatorDuty),
+				Duty:   &testingutils.TestingAggregatorDutyNextEpoch,
 				OutputMessages: []*types.SignedPartialSignatureMessage{
-					testingutils.PreConsensusSelectionProofMsg(ks.Shares[1], ks.Shares[1], 1, 1), // broadcasts when starting a new duty
+					testingutils.PreConsensusSelectionProofNextEpochMsg(ks.Shares[1], ks.Shares[1], 1, 1), // broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:                    "proposer",
-				Runner:                  decideWrong(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyV(spec.DataVersionCapella)),
-				Duty:                    testingutils.TestingProposerDutyNextEpochV(spec.DataVersionCapella),
-				PostDutyRunnerStateRoot: "238450e7c9d6faf88e3f150007d192fd0ed9277fc830c32d0ea53af7e683c374",
+				Name:   "proposer",
+				Runner: decideWrong(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyV(spec.DataVersionCapella)),
+				Duty:   testingutils.TestingProposerDutyNextEpochV(spec.DataVersionCapella),
 				OutputMessages: []*types.SignedPartialSignatureMessage{
-					testingutils.PreConsensusRandaoMsgV(ks.Shares[1], 1, spec.DataVersionCapella), // broadcasts when starting a new duty
+					testingutils.PreConsensusRandaoNextEpochMsgV(ks.Shares[1], 1, spec.DataVersionCapella),
+					// broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:                    "attester",
-				Runner:                  decideWrong(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
-				Duty:                    &testingutils.TestingAttesterDutyNextEpoch,
-				PostDutyRunnerStateRoot: "c3632d9ff5710621062770836586573efd8e291bd1f311f57ec4a5a1563fdf11",
-				OutputMessages:          []*types.SignedPartialSignatureMessage{},
+				Name:           "attester",
+				Runner:         decideWrong(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
+				Duty:           &testingutils.TestingAttesterDutyNextEpoch,
+				OutputMessages: []*types.SignedPartialSignatureMessage{},
 			},
 		},
 	}
