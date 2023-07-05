@@ -58,12 +58,11 @@ func DuplicateDutyFinished() tests.SpecTest {
 				},
 			},
 			{
-				Name: "proposer",
-				Runner: finishRunner(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyNextEpochV(
-					spec.DataVersionCapella)),
-				Duty: testingutils.TestingProposerDutyNextEpochV(spec.DataVersionCapella),
+				Name:   "proposer",
+				Runner: finishRunner(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix)),
+				Duty:   testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix),
 				OutputMessages: []*types.SignedPartialSignatureMessage{
-					testingutils.PreConsensusRandaoNextEpochMsgV(ks.Shares[1], 1, spec.DataVersionCapella), // broadcasts when starting a new duty
+					testingutils.PreConsensusRandaoNextEpochMsgV(ks.Shares[1], 1, spec.DataVersionBellatrix), // broadcasts when starting a new duty
 				},
 			},
 			{

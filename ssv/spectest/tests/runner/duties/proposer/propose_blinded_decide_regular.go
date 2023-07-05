@@ -16,33 +16,33 @@ func ProposeBlindedBlockDecidedRegular() tests.SpecTest {
 	return &tests.MsgProcessingSpecTest{
 		Name:   "propose blinded decide regular",
 		Runner: testingutils.ProposerBlindedBlockRunner(ks),
-		Duty:   testingutils.TestingProposerDutyV(spec.DataVersionCapella),
+		Duty:   testingutils.TestingProposerDutyV(spec.DataVersionBellatrix),
 		Messages: []*types.SSVMessage{
-			testingutils.SSVMsgProposer(nil, testingutils.PreConsensusRandaoDifferentSignerMsgV(ks.Shares[1], ks.Shares[1], 1, 1, spec.DataVersionCapella)),
-			testingutils.SSVMsgProposer(nil, testingutils.PreConsensusRandaoDifferentSignerMsgV(ks.Shares[2], ks.Shares[2], 2, 2, spec.DataVersionCapella)),
-			testingutils.SSVMsgProposer(nil, testingutils.PreConsensusRandaoDifferentSignerMsgV(ks.Shares[3], ks.Shares[3], 3, 3, spec.DataVersionCapella)),
+			testingutils.SSVMsgProposer(nil, testingutils.PreConsensusRandaoDifferentSignerMsgV(ks.Shares[1], ks.Shares[1], 1, 1, spec.DataVersionBellatrix)),
+			testingutils.SSVMsgProposer(nil, testingutils.PreConsensusRandaoDifferentSignerMsgV(ks.Shares[2], ks.Shares[2], 2, 2, spec.DataVersionBellatrix)),
+			testingutils.SSVMsgProposer(nil, testingutils.PreConsensusRandaoDifferentSignerMsgV(ks.Shares[3], ks.Shares[3], 3, 3, spec.DataVersionBellatrix)),
 
 			testingutils.SSVMsgProposer(
 				testingutils.TestingCommitMultiSignerMessageWithHeightIdentifierAndFullData(
 					[]*bls.SecretKey{ks.Shares[1], ks.Shares[2], ks.Shares[3]},
 					[]types.OperatorID{1, 2, 3},
-					qbft.Height(testingutils.TestingDutySlotV(spec.DataVersionCapella)),
+					qbft.Height(testingutils.TestingDutySlotV(spec.DataVersionBellatrix)),
 					testingutils.ProposerMsgID,
-					testingutils.TestProposerConsensusDataBytsV(spec.DataVersionCapella),
+					testingutils.TestProposerConsensusDataBytsV(spec.DataVersionBellatrix),
 				),
 				nil),
 
-			testingutils.SSVMsgProposer(nil, testingutils.PostConsensusProposerMsgV(ks.Shares[1], 1, spec.DataVersionCapella)),
-			testingutils.SSVMsgProposer(nil, testingutils.PostConsensusProposerMsgV(ks.Shares[2], 2, spec.DataVersionCapella)),
-			testingutils.SSVMsgProposer(nil, testingutils.PostConsensusProposerMsgV(ks.Shares[3], 3, spec.DataVersionCapella)),
+			testingutils.SSVMsgProposer(nil, testingutils.PostConsensusProposerMsgV(ks.Shares[1], 1, spec.DataVersionBellatrix)),
+			testingutils.SSVMsgProposer(nil, testingutils.PostConsensusProposerMsgV(ks.Shares[2], 2, spec.DataVersionBellatrix)),
+			testingutils.SSVMsgProposer(nil, testingutils.PostConsensusProposerMsgV(ks.Shares[3], 3, spec.DataVersionBellatrix)),
 		},
 		PostDutyRunnerStateRoot: "6e7445d10e7274415898208c83eb82574d2e5202b2d36af170dbdc18efd1ab98",
 		OutputMessages: []*types.SignedPartialSignatureMessage{
-			testingutils.PreConsensusRandaoMsgV(ks.Shares[1], 1, spec.DataVersionCapella),
-			testingutils.PostConsensusProposerMsgV(ks.Shares[1], 1, spec.DataVersionCapella),
+			testingutils.PreConsensusRandaoMsgV(ks.Shares[1], 1, spec.DataVersionBellatrix),
+			testingutils.PostConsensusProposerMsgV(ks.Shares[1], 1, spec.DataVersionBellatrix),
 		},
 		BeaconBroadcastedRoots: []string{
-			testingutils.GetSSZRootNoError(testingutils.TestingSignedBeaconBlockV(ks, spec.DataVersionCapella)),
+			testingutils.GetSSZRootNoError(testingutils.TestingSignedBeaconBlockV(ks, spec.DataVersionBellatrix)),
 		},
 	}
 }

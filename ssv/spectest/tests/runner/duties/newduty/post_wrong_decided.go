@@ -75,10 +75,10 @@ func PostWrongDecided() tests.SpecTest {
 			},
 			{
 				Name:   "proposer",
-				Runner: decideWrong(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyV(spec.DataVersionCapella)),
-				Duty:   testingutils.TestingProposerDutyV(spec.DataVersionCapella),
+				Runner: decideWrong(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyV(spec.DataVersionBellatrix)),
+				Duty:   testingutils.TestingProposerDutyV(spec.DataVersionBellatrix),
 				OutputMessages: []*types.SignedPartialSignatureMessage{
-					testingutils.PreConsensusRandaoMsgV(ks.Shares[1], 1, spec.DataVersionCapella), // broadcasts when starting a new duty
+					testingutils.PreConsensusRandaoMsgV(ks.Shares[1], 1, spec.DataVersionBellatrix), // broadcasts when starting a new duty
 				},
 			},
 			{

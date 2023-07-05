@@ -81,10 +81,10 @@ func PostInvalidDecided() tests.SpecTest {
 			},
 			{
 				Name:   "proposer",
-				Runner: decideWrong(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyV(spec.DataVersionCapella)),
-				Duty:   testingutils.TestingProposerDutyNextEpochV(spec.DataVersionCapella),
+				Runner: decideWrong(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyV(spec.DataVersionBellatrix)),
+				Duty:   testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix),
 				OutputMessages: []*types.SignedPartialSignatureMessage{
-					testingutils.PreConsensusRandaoNextEpochMsgV(ks.Shares[1], 1, spec.DataVersionCapella),
+					testingutils.PreConsensusRandaoNextEpochMsgV(ks.Shares[1], 1, spec.DataVersionBellatrix),
 					// broadcasts when starting a new duty
 				},
 			},
