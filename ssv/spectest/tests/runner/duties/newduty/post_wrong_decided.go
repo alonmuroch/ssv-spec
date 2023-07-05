@@ -51,42 +51,47 @@ func PostWrongDecided() tests.SpecTest {
 		Name: "new duty post wrong decided",
 		Tests: []*StartNewRunnerDutySpecTest{
 			{
-				Name:   "sync committee aggregator",
-				Runner: decideWrong(testingutils.SyncCommitteeContributionRunner(ks), &testingutils.TestingSyncCommitteeContributionDuty),
-				Duty:   &testingutils.TestingSyncCommitteeContributionDuty,
+				Name:                    "sync committee aggregator",
+				Runner:                  decideWrong(testingutils.SyncCommitteeContributionRunner(ks), &testingutils.TestingSyncCommitteeContributionDuty),
+				Duty:                    &testingutils.TestingSyncCommitteeContributionDuty,
+				PostDutyRunnerStateRoot: "1755f6cbd21dd492f8398bc09909d2f5509d11c9018d6582fe4d94c4fd1473a4",
 				OutputMessages: []*types.SignedPartialSignatureMessage{
 					testingutils.PreConsensusContributionProofMsg(ks.Shares[1], ks.Shares[1], 1, 1), // broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:           "sync committee",
-				Runner:         decideWrong(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
-				Duty:           &testingutils.TestingSyncCommitteeDuty,
-				OutputMessages: []*types.SignedPartialSignatureMessage{},
-				ExpectedError:  "can't start new duty runner instance for duty: could not start new QBFT instance: attempting to start an instace with a past or current height",
+				Name:                    "sync committee",
+				Runner:                  decideWrong(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
+				Duty:                    &testingutils.TestingSyncCommitteeDuty,
+				PostDutyRunnerStateRoot: "037414235648efdf794077306b597690be309e4baba7cfd687d6e90b1bbe2402",
+				OutputMessages:          []*types.SignedPartialSignatureMessage{},
+				ExpectedError:           "can't start new duty runner instance for duty: could not start new QBFT instance: attempting to start an instace with a past or current height",
 			},
 			{
-				Name:   "aggregator",
-				Runner: decideWrong(testingutils.AggregatorRunner(ks), &testingutils.TestingAggregatorDuty),
-				Duty:   &testingutils.TestingAggregatorDuty,
+				Name:                    "aggregator",
+				Runner:                  decideWrong(testingutils.AggregatorRunner(ks), &testingutils.TestingAggregatorDuty),
+				Duty:                    &testingutils.TestingAggregatorDuty,
+				PostDutyRunnerStateRoot: "441378c466c16e0b59be45dbaaa7321990a8a8df1bfc8d4cba0b4dac0efe76fc",
 				OutputMessages: []*types.SignedPartialSignatureMessage{
 					testingutils.PreConsensusSelectionProofMsg(ks.Shares[1], ks.Shares[1], 1, 1), // broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:   "proposer",
-				Runner: decideWrong(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyV(spec.DataVersionBellatrix)),
-				Duty:   testingutils.TestingProposerDutyV(spec.DataVersionBellatrix),
+				Name:                    "proposer",
+				Runner:                  decideWrong(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyV(spec.DataVersionBellatrix)),
+				Duty:                    testingutils.TestingProposerDutyV(spec.DataVersionBellatrix),
+				PostDutyRunnerStateRoot: "f1f8ef52d758ac2bd1222943dad8c7a3aaf8bfd54255a65f192cc36791b8e862",
 				OutputMessages: []*types.SignedPartialSignatureMessage{
 					testingutils.PreConsensusRandaoMsgV(ks.Shares[1], 1, spec.DataVersionBellatrix), // broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:           "attester",
-				Runner:         decideWrong(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
-				Duty:           &testingutils.TestingAttesterDuty,
-				OutputMessages: []*types.SignedPartialSignatureMessage{},
-				ExpectedError:  "can't start new duty runner instance for duty: could not start new QBFT instance: attempting to start an instace with a past or current height",
+				Name:                    "attester",
+				Runner:                  decideWrong(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
+				Duty:                    &testingutils.TestingAttesterDuty,
+				PostDutyRunnerStateRoot: "43819363c8d1080883c8d4ecb2b25fc1cde06facb14825c533a891f0be6f539a",
+				OutputMessages:          []*types.SignedPartialSignatureMessage{},
+				ExpectedError:           "can't start new duty runner instance for duty: could not start new QBFT instance: attempting to start an instace with a past or current height",
 			},
 		},
 	}

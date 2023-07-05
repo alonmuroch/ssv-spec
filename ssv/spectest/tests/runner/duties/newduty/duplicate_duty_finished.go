@@ -35,42 +35,47 @@ func DuplicateDutyFinished() tests.SpecTest {
 		Name: "duplicate duty finished",
 		Tests: []*StartNewRunnerDutySpecTest{
 			{
-				Name:   "sync committee aggregator",
-				Runner: finishRunner(testingutils.SyncCommitteeContributionRunner(ks), &testingutils.TestingSyncCommitteeContributionNexEpochDuty),
-				Duty:   &testingutils.TestingSyncCommitteeContributionNexEpochDuty,
+				Name:                    "sync committee aggregator",
+				Runner:                  finishRunner(testingutils.SyncCommitteeContributionRunner(ks), &testingutils.TestingSyncCommitteeContributionNexEpochDuty),
+				Duty:                    &testingutils.TestingSyncCommitteeContributionNexEpochDuty,
+				PostDutyRunnerStateRoot: "a91a90cd4033996ef7ccfccd36dcc2306e56c0b42ab51e6bb97fd88e7d3b6e35",
 				OutputMessages: []*types.SignedPartialSignatureMessage{
 					testingutils.PreConsensusContributionProofNextEpochMsg(ks.Shares[1], ks.Shares[1], 1, 1), // broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:           "sync committee",
-				Runner:         finishRunner(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
-				Duty:           &testingutils.TestingSyncCommitteeDuty,
-				OutputMessages: []*types.SignedPartialSignatureMessage{},
-				ExpectedError:  "can't start new duty runner instance for duty: could not start new QBFT instance: instance already running",
+				Name:                    "sync committee",
+				Runner:                  finishRunner(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
+				Duty:                    &testingutils.TestingSyncCommitteeDuty,
+				OutputMessages:          []*types.SignedPartialSignatureMessage{},
+				PostDutyRunnerStateRoot: "07b3b82b83ed99a1bb474dacdb65d26866e1ed9aac13f805849e76133bdb0e2d",
+				ExpectedError:           "can't start new duty runner instance for duty: could not start new QBFT instance: instance already running",
 			},
 			{
-				Name:   "aggregator",
-				Runner: finishRunner(testingutils.AggregatorRunner(ks), &testingutils.TestingAggregatorDutyNextEpoch),
-				Duty:   &testingutils.TestingAggregatorDutyNextEpoch,
+				Name:                    "aggregator",
+				Runner:                  finishRunner(testingutils.AggregatorRunner(ks), &testingutils.TestingAggregatorDutyNextEpoch),
+				Duty:                    &testingutils.TestingAggregatorDutyNextEpoch,
+				PostDutyRunnerStateRoot: "f58c8a5d953658339cbac025bb1f3d563eaad8693c9af8c780c95d808732e464",
 				OutputMessages: []*types.SignedPartialSignatureMessage{
 					testingutils.PreConsensusSelectionProofNextEpochMsg(ks.Shares[1], ks.Shares[1], 1, 1), // broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:   "proposer",
-				Runner: finishRunner(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix)),
-				Duty:   testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix),
+				Name:                    "proposer",
+				Runner:                  finishRunner(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix)),
+				Duty:                    testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix),
+				PostDutyRunnerStateRoot: "64fde74afdea2233294e1a9b4943ca49b9c39fe1cc3d7f9b7b8e34d2882fa36f",
 				OutputMessages: []*types.SignedPartialSignatureMessage{
 					testingutils.PreConsensusRandaoNextEpochMsgV(ks.Shares[1], 1, spec.DataVersionBellatrix), // broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:           "attester",
-				Runner:         finishRunner(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
-				Duty:           &testingutils.TestingAttesterDuty,
-				OutputMessages: []*types.SignedPartialSignatureMessage{},
-				ExpectedError:  "can't start new duty runner instance for duty: could not start new QBFT instance: instance already running",
+				Name:                    "attester",
+				Runner:                  finishRunner(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
+				Duty:                    &testingutils.TestingAttesterDuty,
+				PostDutyRunnerStateRoot: "c3cf6b42e871e97e5a1661496104e26ab77a409355a852d05662c4d6f2af2e99",
+				OutputMessages:          []*types.SignedPartialSignatureMessage{},
+				ExpectedError:           "can't start new duty runner instance for duty: could not start new QBFT instance: instance already running",
 			},
 		},
 	}
