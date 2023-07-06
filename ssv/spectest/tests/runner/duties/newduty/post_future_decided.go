@@ -53,7 +53,7 @@ func PostFutureDecided() tests.SpecTest {
 				Runner:         futureDecide(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
 				Duty:           &testingutils.TestingSyncCommitteeDuty,
 				OutputMessages: []*types.SignedPartialSignatureMessage{},
-				ExpectedError:  "can't start new duty runner instance for duty: could not start new QBFT instance: attempting to start an instace with a past or current height",
+				ExpectedError:  "can't start new duty runner instance for duty: could not start new QBFT instance: attempting to start an instance with a past height",
 			},
 			{
 				Name:   "aggregator",
@@ -76,7 +76,7 @@ func PostFutureDecided() tests.SpecTest {
 				Runner:         futureDecide(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
 				Duty:           &testingutils.TestingAttesterDuty,
 				OutputMessages: []*types.SignedPartialSignatureMessage{},
-				ExpectedError:  "can't start new duty runner instance for duty: could not start new QBFT instance: attempting to start an instace with a past or current height",
+				ExpectedError:  "can't start new duty runner instance for duty: could not start new QBFT instance: attempting to start an instance with a past height",
 			},
 		},
 	}
