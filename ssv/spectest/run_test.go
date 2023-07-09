@@ -3,7 +3,6 @@ package spectest
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/bloxapp/ssv-spec/ssv/spectest/tests/runner/duties/proposer"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -40,10 +39,6 @@ func TestAll(t *testing.T) {
 	wait.Wait()
 }
 
-// TestOne will run a single test.
-func TestOne(t *testing.T) {
-	proposer.ProposeBlindedBlockDecidedRegular().Run(t)
-}
 func TestJson(t *testing.T) {
 	t.Parallel()
 
