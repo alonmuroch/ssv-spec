@@ -43,42 +43,47 @@ func PostFutureDecided() tests.SpecTest {
 		Name: "new duty post future decided",
 		Tests: []*StartNewRunnerDutySpecTest{
 			{
-				Name:   "sync committee aggregator",
-				Runner: futureDecide(testingutils.SyncCommitteeContributionRunner(ks), &testingutils.TestingSyncCommitteeContributionNexEpochDuty),
-				Duty:   &testingutils.TestingSyncCommitteeContributionNexEpochDuty,
+				Name:                    "sync committee aggregator",
+				Runner:                  futureDecide(testingutils.SyncCommitteeContributionRunner(ks), &testingutils.TestingSyncCommitteeContributionNexEpochDuty),
+				Duty:                    &testingutils.TestingSyncCommitteeContributionNexEpochDuty,
+				PostDutyRunnerStateRoot: "b4713150d68451ce58ffb8399509a7ebb674d80c88885898e364acac9dee287c",
 				OutputMessages: []*types.SignedPartialSignatureMessage{
 					testingutils.PreConsensusContributionProofNextEpochMsg(ks.Shares[1], ks.Shares[1], 1, 1), // broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:           "sync committee",
-				Runner:         futureDecide(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
-				Duty:           &testingutils.TestingSyncCommitteeDuty,
-				OutputMessages: []*types.SignedPartialSignatureMessage{},
-				ExpectedError:  expectedError,
+				Name:                    "sync committee",
+				Runner:                  futureDecide(testingutils.SyncCommitteeRunner(ks), &testingutils.TestingSyncCommitteeDuty),
+				Duty:                    &testingutils.TestingSyncCommitteeDuty,
+				PostDutyRunnerStateRoot: "046ff8dbd9cbdf54cd8ce1356230f30deff71e47283275d01817e2d317b84194",
+				OutputMessages:          []*types.SignedPartialSignatureMessage{},
+				ExpectedError:           expectedError,
 			},
 			{
-				Name:   "aggregator",
-				Runner: futureDecide(testingutils.AggregatorRunner(ks), &testingutils.TestingAggregatorDutyNextEpoch),
-				Duty:   &testingutils.TestingAggregatorDutyNextEpoch,
+				Name:                    "aggregator",
+				Runner:                  futureDecide(testingutils.AggregatorRunner(ks), &testingutils.TestingAggregatorDutyNextEpoch),
+				Duty:                    &testingutils.TestingAggregatorDutyNextEpoch,
+				PostDutyRunnerStateRoot: "c29585575507df93cbdbb0a6afcdeb541101c02fbb6aee346b5e48b29fcf9107",
 				OutputMessages: []*types.SignedPartialSignatureMessage{
 					testingutils.PreConsensusSelectionProofNextEpochMsg(ks.Shares[1], ks.Shares[1], 1, 1), // broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:   "proposer",
-				Runner: futureDecide(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix)),
-				Duty:   testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix),
+				Name:                    "proposer",
+				Runner:                  futureDecide(testingutils.ProposerRunner(ks), testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix)),
+				Duty:                    testingutils.TestingProposerDutyNextEpochV(spec.DataVersionBellatrix),
+				PostDutyRunnerStateRoot: "6d54dde37b0658f7d4447302e980ed505b063b23a87517014eada4646e126ffc",
 				OutputMessages: []*types.SignedPartialSignatureMessage{
 					testingutils.PreConsensusRandaoNextEpochMsgV(ks.Shares[1], 1, spec.DataVersionBellatrix), // broadcasts when starting a new duty
 				},
 			},
 			{
-				Name:           "attester",
-				Runner:         futureDecide(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
-				Duty:           &testingutils.TestingAttesterDuty,
-				OutputMessages: []*types.SignedPartialSignatureMessage{},
-				ExpectedError:  expectedError,
+				Name:                    "attester",
+				Runner:                  futureDecide(testingutils.AttesterRunner(ks), &testingutils.TestingAttesterDuty),
+				Duty:                    &testingutils.TestingAttesterDuty,
+				PostDutyRunnerStateRoot: "02bfc445dc650412518fb44d8a3a191ae8e180bcc4c2a4ac56e37485f4737d8f",
+				OutputMessages:          []*types.SignedPartialSignatureMessage{},
+				ExpectedError:           expectedError,
 			},
 		},
 	}
