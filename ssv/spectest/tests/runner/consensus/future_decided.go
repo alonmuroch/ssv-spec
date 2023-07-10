@@ -11,7 +11,8 @@ import (
 	"github.com/bloxapp/ssv-spec/types/testingutils"
 )
 
-// TODO: should a future decided message stop previous instances? currently we return an error but should we?
+// https://github.com/bloxapp/ssv-spec/issues/280.
+// should a future decided message stop previous instances? currently we return an error but should we?
 // A future decided means that no one will process our old instance messages...
 
 // FutureDecided tests a running instance at a certain height, then processing a decided msg from a larger height.
