@@ -22,6 +22,6 @@ func SomeAggregatorQuorum() tests.SpecTest {
 			hex.EncodeToString(testingutils.TestingContributionProofsSigned[1][:]): false,
 			hex.EncodeToString(testingutils.TestingContributionProofsSigned[2][:]): true,
 		},
-		PostDutyRunnerStateRoot: "s",
+		PostDutyRunnerStateRoot: "b11cb2d6684fd612da4b885cd52080cd2d5a2c79f5a42297623205603f1f6599",
 	}
 }
