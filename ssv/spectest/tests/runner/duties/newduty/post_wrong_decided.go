@@ -15,7 +15,7 @@ import (
 func PostWrongDecided() tests.SpecTest {
 	ks := testingutils.Testing4SharesSet()
 
-	// TODO: not sure what is the value of doing this. We initialize the runner with an impossible decided value.
+	// https://github.com/bloxapp/ssv-spec/issues/285. We initialize the runner with an impossible decided value.
 	// Maybe we should ensure that `ValidateDecided()` doesn't let the runner enter this state and delete the test?
 	decideWrong := func(r ssv.Runner, duty *types.Duty) ssv.Runner {
 		storedInstances := r.GetBaseRunner().QBFTController.StoredInstances
