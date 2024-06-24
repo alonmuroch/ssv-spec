@@ -65,7 +65,7 @@ func (r *AttesterRunner) ProcessPreConsensus(signedMsg *types.SignedPartialSigna
 }
 
 func (r *AttesterRunner) ProcessConsensus(signedMsg *qbft.SignedMessage) error {
-	decided, decidedValue, err := r.BaseRunner.baseConsensusMsgProcessing(r, signedMsg)
+	decided, _, err := r.BaseRunner.baseConsensusMsgProcessing(r, signedMsg)
 	if err != nil {
 		return errors.Wrap(err, "failed processing consensus message")
 	}
@@ -74,6 +74,12 @@ func (r *AttesterRunner) ProcessConsensus(signedMsg *qbft.SignedMessage) error {
 	if !decided {
 		return nil
 	}
+
+	return r.UponDecided()
+}
+
+func (r *AttesterRunner) UponDecided() error {
+	decidedValue := r.BaseRunner.State.DecidedValue
 
 	attestationData, err := decidedValue.GetAttestationData()
 	if err != nil {

@@ -7,6 +7,12 @@ import (
 	"github.com/ssvlabs/ssv-spec/types"
 )
 
+// committeeDuty holds the tuple <validator, duty>
+type committeeDuty struct {
+	Validator *Validator
+	Duty      *types.Duty
+}
+
 type Committee struct {
 	Validators       []*Validator
 	CommitteeRunners [32]*CommitteeRunner
@@ -20,30 +26,26 @@ func NewCommittee(validators []*Validator, runners [32]*CommitteeRunner) *Commit
 }
 
 func (c *Committee) StartDuty(duty *types.CommitteeDuty) error {
-	committeeDuties := map[types.BeaconRole][]*types.Duty{
-		types.BNRoleAttester:      {},
-		types.BNRoleSyncCommittee: {},
-	}
+	committeeDuties := make([]*committeeDuty, 0)
 	for _, d := range duty.BeaconDuties {
+		v := c.getValidatorByPubkey(d.PubKey[:])
+		if v == nil {
+			return errors.New("validator not found")
+		}
+
 		if types.IsCommitteeDuty(d.Type) {
-			committeeDuties[d.Type] = append(committeeDuties[d.Type], d)
+			committeeDuties = append(committeeDuties, &committeeDuty{
+				Validator: v,
+				Duty:      d,
+			})
 		} else {
-			if v := c.getValidatorByPubkey(d.PubKey[:]); v != nil {
-				if err := v.StartDuty(d); err != nil {
-					return err
-				}
-			} else {
-				return errors.New("validator not found")
+			if err := v.StartDuty(d); err != nil {
+				return err
 			}
 		}
 	}
 
-	if err := c.CommitteeRunners[duty.Slot%32].StartNewDuty(committeeDuties[types.BNRoleAttester]); err != nil {
-		return err
-	}
-	if err := c.CommitteeRunners[duty.Slot%32].StartNewDuty(committeeDuties[types.BNRoleSyncCommittee]); err != nil {
-		return err
-	}
+	c.CommitteeRunners[duty.Slot%32] = NewCommitteeRunner(committeeDuties)
 
 	return nil
 }
@@ -77,13 +79,8 @@ func (c *Committee) ProcessMessage(signedSSVMessage *types.SignedSSVMessage) err
 				return errors.Wrap(err, "could not get consensus Message from network Message")
 			}
 
-			// Check signer consistency
-			if !signedMsg.CommonSigners([]types.OperatorID{signedSSVMessage.OperatorID}) {
-				return errors.New("SignedSSVMessage's signer not consistent with SignedMessage's signers")
-			}
-
 			if runner := c.CommitteeRunners[signedMsg.Message.Height%32]; runner != nil {
-				return runner.ProcessConsensus(signedMsg)
+				return runner.ProcessConsensus(signedSSVMessage)
 			}
 			return errors.New("could not find runner")
 		case types.SSVPartialSignatureMsgType:
@@ -93,19 +90,13 @@ func (c *Committee) ProcessMessage(signedSSVMessage *types.SignedSSVMessage) err
 				return errors.Wrap(err, "could not get post consensus Message from network Message")
 			}
 
-			// Check signer consistency
-			if signedMsg.Signer != signedSSVMessage.OperatorID {
-				return errors.New("SignedSSVMessage's signer not consistent with SignedPartialSignatureMessage's signer")
-			}
-
 			// Process
 			if runner := c.CommitteeRunners[signedMsg.Message.Slot%32]; runner != nil {
-				if signedMsg.Message.Type == types.PostConsensusPartialSig {
-					return runner.ProcessPostConsensus(signedMsg)
-				}
-				return runner.ProcessPreConsensus(signedMsg)
+				return runner.ProcessPostConsensus(pk, signedSSVMessage)
 			}
 			return errors.New("could not find runner")
+		default:
+			return errors.New("msg type not supported")
 		}
 	} else { // message to validator
 		if v := c.getValidatorByPubkey(pk); v != nil {

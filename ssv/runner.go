@@ -32,6 +32,9 @@ type Runner interface {
 	// ProcessPostConsensus processes all post-consensus msgs, returns error if can't process
 	ProcessPostConsensus(signedMsg *types.SignedPartialSignatureMessage) error
 
+	// UponDecided called after consensus message was processed and decided
+	UponDecided() error
+
 	// expectedPreConsensusRootsAndDomain an INTERNAL function, returns the expected pre-consensus roots to sign
 	expectedPreConsensusRootsAndDomain() ([]ssz.HashRoot, spec.DomainType, error)
 	// expectedPostConsensusRootsAndDomain an INTERNAL function, returns the expected post-consensus roots to sign
